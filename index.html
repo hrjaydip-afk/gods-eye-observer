@@ -1,1 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>GOD'S EYE OBSERVER</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #080e19;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+header {
+    background: #111c2e;
+    padding: 20px;
+    text-align: center;
+    border-bottom: 2px solid #00d9ff;
+}
+
+header h1 {
+    color: #00d9ff;
+    margin: 0;
+    font-size: 25px;
+}
+
+header p {
+    color: #9eacc2;
+    font-size: 12px;
+}
+
+.container {
+    padding: 15px;
+}
+
+.status {
+    background: #142238;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.live {
+    color: #00ff88;
+    font-weight: bold;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+button {
+    background: #172943;
+    border: 1px solid #00bfff;
+    color: white;
+    padding: 13px 5px;
+    border-radius: 7px;
+    font-size: 13px;
+}
+
+button:active {
+    background: #007bff;
+}
+
+.card {
+    background: #111c2e;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.card h3 {
+    color: #00d9ff;
+    margin-top: 0;
+}
+
+.signal {
+    text-align: center;
+    font-size: 25px;
+    color: #ffc107;
+    font-weight: bold;
+}
+
+.chart {
+    width: 100%;
+    height: 550px;
+}
+
+footer {
+    text-align: center;
+    color: #718096;
+    padding: 20px;
+    font-size: 12px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>👁 GOD'S EYE OBSERVER</h1>
+<p>SMART MONEY • MARKET INTELLIGENCE • LIVE TRADING</p>
+</header>
+
+<div class="container">
+
+<div class="status">
+    <div class="live">● LIVE MARKET CHART</div>
+    <p>TradingView Market Data</p>
+</div>
+
+<div class="card">
+<h3>SELECT MARKET</h3>
+
+<div class="buttons">
+<button onclick="loadChart('OANDA:XAUUSD')">GOLD</button>
+<button onclick="loadChart('BINANCE:BTCUSDT')">BTC</button>
+<button onclick="loadChart('NASDAQ:NDX')">NASDAQ</button>
+<button onclick="loadChart('NSE:NIFTY')">NIFTY</button>
+<button onclick="loadChart('NSE:BANKNIFTY')">BANK NIFTY</button>
+<button onclick="loadChart('NSE:SENSEX')">SENSEX</button>
+</div>
+</div>
+
+<div class="card">
+<h3>TIME FRAME</h3>
+
+<div class="buttons">
+<button onclick="changeTime('5')">M5</button>
+<button onclick="changeTime('15')">M15</button>
+<button onclick="changeTime('30')">M30</button>
+<button onclick="changeTime('60')">H1</button>
+<button onclick="changeTime('240')">H4</button>
+<button onclick="changeTime('D')">DAILY</button>
+</div>
+</div>
+
+<div class="card">
+<h3>TRADING SIGNAL</h3>
+<div class="signal">WAIT</div>
+<p style="text-align:center;color:#9eacc2">
+Automated BUY / SELL engine not connected yet.
+</p>
+</div>
+
+<div class="card">
+<h3>LIVE TRADING CHART</h3>
+<div id="tradingview_chart" class="chart"></div>
+</div>
+
+<div class="card">
+<h3>TRADING STRATEGY</h3>
+<p>• SMA 10 / 20 / 50</p>
+<p>• Momentum Candle</p>
+<p>• Pullback Entry</p>
+<p>• Trend Confirmation</p>
+<p>• Risk Reward Management</p>
+</div>
+
+<div class="card">
+<h3>RISK MANAGEMENT</h3>
+<p>Entry: Pending</p>
+<p>Stop Loss: Pending</p>
+<p>Target 1: Pending</p>
+<p>Target 2: Pending</p>
+<p>Target 3: Pending</p>
+</div>
+
+</div>
+
+<footer>
+GOD'S EYE OBSERVER © 2026
+<br>
+Powered by TradingView
+</footer>
+
+<script>
+let currentSymbol = "OANDA:XAUUSD";
+let currentTime = "15";
+
+function loadChart(symbol) {
+    currentSymbol = symbol;
+    showChart();
+}
+
+function changeTime(time) {
+    currentTime = time;
+    showChart();
+}
+
+function showChart() {
+
+    const box = document.getElementById("tradingview_chart");
+
+    box.innerHTML = "";
+
+    const widget = document.createElement("div");
+    widget.className = "tradingview-widget-container";
+    widget.style.height = "100%";
+    widget.style.width = "100%";
+
+    const chart = document.createElement("div");
+    chart.className = "tradingview-widget-container__widget";
+    chart.style.height = "100%";
+    chart.style.width = "100%";
+
+    widget.appendChild(chart);
+
+    const script = document.createElement("script");
+
+    script.src = "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
+    script.async = true;
+
+    script.innerHTML = JSON.stringify({
+        "autosize": true,
+        "symbol": currentSymbol,
+        "interval": currentTime,
+        "timezone": "Asia/Kolkata",
+        "theme": "dark",
+        "style": "1",
+        "locale": "en",
+        "allow_symbol_change": true,
+        "calendar": false,
+        "support_host": "https://www.tradingview.com"
+    });
+
+    widget.appendChild(script);
+    box.appendChild(widget);
+}
+
+showChart();
+</script>
+
+</body>
+</html>
