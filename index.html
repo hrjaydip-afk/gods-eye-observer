@@ -2,154 +2,322 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GOD'S EYE OBSERVER</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>THE GOD'S EYE — OBSERVER</title>
 <style>
-body {
-    margin: 0;
-    background: #080e19;
-    color: white;
-    font-family: Arial;
+:root{--bg:#070d16;--panel:#0d1725;--cyan:#25d7f2;--red:#ff6c76;--green:#35d6a0;--muted:#8498b1;--line:#203247;--white:#e8f1fc}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at 50% 0%,#102033 0,#070d16 55%);color:var(--white);font:14px Arial,sans-serif}
+header{padding:20px 24px;border-bottom:1px solid #1d3044;background:#080f1a}
+.brand{font-size:clamp(20px,3vw,32px);font-weight:bold;color:var(--cyan)}
+.brand span{font-size:.6em;color:#8cb9ca}
+.subtitle{font-size:10px;letter-spacing:2px;color:var(--muted);margin-top:5px}
+.shell{display:grid;grid-template-columns:185px minmax(0,1fr) 185px;gap:18px;max-width:1800px;margin:auto;padding:18px}
+.side{display:flex;flex-direction:column;gap:15px;padding-top:60px}
+.panel{background:linear-gradient(145deg,#101b2b,#0a1320);border:1px solid #26374b;border-radius:15px;padding:14px;position:relative}
+.ptitle{font-size:10px;letter-spacing:1.4px;color:#8ea4bc;text-align:center;font-weight:bold;margin-bottom:12px}
+.bigmetric{text-align:center;font-size:24px;font-weight:bold;margin:8px;color:var(--cyan)}
+.smalltext{font-size:11px;color:var(--muted);text-align:center}
+.ring{width:88px;height:88px;border-radius:50%;margin:10px auto;border:8px solid #22cbe4;border-right-color:#23445b;display:grid;place-items:center;font-size:17px}
+.row{display:flex;justify-content:space-between;gap:8px;margin:9px 0;font-size:11px;color:#9eb0c5}
+.sectionlabel{color:var(--cyan);font-weight:bold;letter-spacing:1.3px;font-size:13px;margin:10px 0}
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:20px}
+.cards.four{grid-template-columns:repeat(4,minmax(0,1fr))}
+.market{position:relative;min-height:180px;padding:20px 18px;border-radius:16px;background:linear-gradient(145deg,#151b2a,#0b1421);border:1px solid #a94e5b;box-shadow:inset 0 0 28px #ff5c682c;cursor:pointer}
+.market.selected{outline:2px solid var(--cyan)}
+.mname{font-size:14px;color:#a9bacd;font-weight:bold}
+.score{font-size:37px;font-weight:bold;margin-top:12px;color:var(--red)}
+.state{font-size:13px;font-weight:bold;color:var(--red)}
+.detail{color:#8196ae;font-size:12px;margin-top:7px}
+.divergence{color:var(--green);font-size:12px;margin-top:7px}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 16px}
+button{background:#101e30;border:1px solid #29415a;color:#b9c9dc;padding:9px 13px;border-radius:7px}
+button.active{border-color:var(--cyan);color:var(--cyan)}
+#chart{height:440px;background:#0a1422;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.lower{display:grid;grid-template-columns:1.4fr 1fr;gap:14px;margin-top:16px}
+h2{font-size:17px}
+table{width:100%;border-collapse:collapse;font-size:11px}
+td,th{text-align:left;padding:9px 5px;border-bottom:1px solid #24364b}
+th{color:#8196ae}
+.disclaimer{font-size:10px;color:#72869e;line-height:1.6}
+@media(max-width:1050px){
+.shell{grid-template-columns:150px minmax(0,1fr) 150px;gap:10px}
+.cards.four{grid-template-columns:repeat(2,1fr)}
 }
-header {
-    background: #111c2e;
-    padding: 20px;
-    text-align: center;
-    color: #00d9ff;
-}
-.container {
-    padding: 15px;
-}
-.card {
-    background: #142238;
-    padding: 15px;
-    margin-bottom: 15px;
-    border-radius: 10px;
-}
-h3 {
-    color: #00d9ff;
-}
-button {
-    background: #172943;
-    color: white;
-    border: 1px solid #00bfff;
-    padding: 12px;
-    margin: 4px;
-    border-radius: 6px;
-}
-#chart {
-    height: 500px;
-}
-.signal {
-    text-align: center;
-    color: #ffc107;
-    font-size: 28px;
-    font-weight: bold;
+@media(max-width:760px){
+.shell{display:flex;flex-direction:column}
+.side{padding-top:0;display:grid;grid-template-columns:repeat(2,1fr)}
+.cards,.cards.four{grid-template-columns:repeat(2,1fr)}
+.market{min-height:160px}
+.lower{grid-template-columns:1fr}
+#chart{height:390px}
 }
 </style>
 </head>
+
 <body>
+
 <header>
-<h1>👁 GOD'S EYE OBSERVER</h1>
-<p>ADVANCED MULTI MARKET TRADING SYSTEM</p>
+<div class="brand">◉ THE GOD'S EYE <span>— OBSERVER</span></div>
+<div class="subtitle">SIGNAL INTELLIGENCE ARRAY · PATTERN RECOGNITION ENGINE</div>
 </header>
-<div class="container">
-<div class="card">
-<h3>MAIN MARKETS</h3>
-<button onclick="loadChart('OANDA:XAUUSD')">GOLD</button>
-<button onclick="loadChart('TVC:UKOIL')">BRENT CRUDE</button>
-<button onclick="loadChart('TVC:USOIL')">WTI CRUDE</button>
-<button onclick="loadChart('OANDA:XAGUSD')">SILVER</button>
-<button onclick="loadChart('NYMEX:NG1!')">NATURAL GAS</button>
+
+<div class="shell">
+
+<aside class="side">
+<div class="panel">
+<div class="ptitle">SIGNAL THROUGHPUT</div>
+<div class="ring">—</div>
+<div class="smalltext">Processing load:<br>Awaiting data feed</div>
 </div>
-<div class="card">
-<h3>OTHER MARKETS</h3>
-<button onclick="loadChart('NSE:NIFTY')">NIFTY</button>
-<button onclick="loadChart('NSE:BANKNIFTY')">BANK NIFTY</button>
-<button onclick="loadChart('BSE:SENSEX')">SENSEX</button>
-<button onclick="loadChart('BITSTAMP:BTCUSD')">BTC</button>
-<button onclick="loadChart('BITSTAMP:ETHUSD')">ETH</button>
-<button onclick="loadChart('NASDAQ:NDX')">NASDAQ</button>
-<button onclick="loadChart('SP:SPX')">S&P 500</button>
+
+<div class="panel">
+<div class="ptitle">DOLLAR PULSE</div>
+<div class="bigmetric">—</div>
+<div class="smalltext">USD news strength</div>
+<div class="row"><span>DXY</span><b>API pending</b></div>
+<div class="row"><span>US 10Y</span><b>API pending</b></div>
 </div>
-<div class="card">
-<h3>TIME FRAME</h3>
-<button onclick="changeTF('5')">M5</button>
-<button onclick="changeTF('15')">M15</button>
-<button onclick="changeTF('30')">M30</button>
-<button onclick="changeTF('60')">H1</button>
-<button onclick="changeTF('240')">H4</button>
-<button onclick="changeTF('D')">DAILY</button>
+
+<div class="panel">
+<div class="ptitle">RISK GAUGE</div>
+<div class="bigmetric">UNAVAILABLE</div>
+<div class="smalltext">S&P 500 · VIX</div>
+<div class="row"><span>Risk regime</span><b>Feed pending</b></div>
 </div>
-<div class="card">
-<h3>LIVE TRADING CHART</h3>
+
+<div class="panel">
+<div class="ptitle">OPTIONS / OI PULSE</div>
+<div class="row"><span>Call OI</span><b>—</b></div>
+<div class="row"><span>Put OI</span><b>—</b></div>
+<div class="smalltext">Build-up: data pending</div>
+</div>
+
+<div class="panel">
+<div class="ptitle">PCR / OI DATA</div>
+<div class="bigmetric">—</div>
+<div class="row"><span>OI change +</span><b>—</b></div>
+<div class="row"><span>OI change -</span><b>—</b></div>
+</div>
+</aside>
+
+<main>
+
+<div class="sectionlabel">COMMODITIES (USD)</div>
+<div class="cards" id="commodities"></div>
+
+<div class="sectionlabel">INDICES & GLOBAL RISK</div>
+<div class="cards" id="indices"></div>
+
+<div class="sectionlabel">CRYPTO (USD)</div>
+<div class="cards four" id="crypto"></div>
+
+<div class="sectionlabel">FOREX & OTHER MARKETS</div>
+<div class="cards four" id="forex"></div>
+
+<div class="sectionlabel">LIVE CHART · SELECT ANY MARKET CARD</div>
+
+<div class="toolbar">
+<button data-tf="5">M5</button>
+<button data-tf="15" class="active">M15</button>
+<button data-tf="60">H1</button>
+<button data-tf="240">H4</button>
+<button data-tf="D">1D</button>
+</div>
+
 <div id="chart"></div>
+
+<div class="lower">
+
+<div class="panel">
+<h2>🔥 Market Intelligence Feed</h2>
+<p class="detail">
+News headlines, sentiment scoring, headline volume and source timestamps will appear here after a licensed news feed is connected.
+</p>
+<p class="disclaimer">
+News sentiment should be calculated from timestamped, source-attributed headlines.
+</p>
 </div>
-<div class="card">
-<h3>ADVANCED SIGNAL ENGINE</h3>
-<div class="signal">WAIT</div>
-<p>SMA 10 / 20 / 50</p>
-<p>ICT / SMC</p>
-<p>Order Block / FVG</p>
-<p>Liquidity Sweep</p>
-<p>BOS / CHoCH</p>
-<p>RSI + MACD Divergence</p>
+
+<div class="panel">
+<h2>⚡ Signal & Divergence Monitor</h2>
+<table>
+<tr><th>ENGINE</th><th>STATUS</th></tr>
+<tr><td>RSI / MACD divergence</td><td>Awaiting OHLC API</td></tr>
+<tr><td>ICT / SMC structure</td><td>Awaiting OHLC API</td></tr>
+<tr><td>Retail long / short</td><td>Provider required</td></tr>
+<tr><td>News / social sentiment</td><td>Provider required</td></tr>
+<tr><td>Entry / SL / targets</td><td>Not calculated</td></tr>
+</table>
 </div>
-<div class="card">
-<h3>PUBLIC SENTIMENT</h3>
-<p>Retail Long / Short: API Pending</p>
-<p>News Sentiment: API Pending</p>
-<p>Social Sentiment: API Pending</p>
+
 </div>
-<div class="card">
-<h3>TRADE MANAGEMENT</h3>
-<p>Entry: Pending</p>
-<p>Stop Loss: Pending</p>
-<p>Target 1: Pending</p>
-<p>Target 2: Pending</p>
-<p>Target 3: Pending</p>
+
+<p class="disclaimer">
+IMPORTANT: This is a visual dashboard prototype. Market cards intentionally show DATA PENDING rather than invented live scores. Real-time sentiment, divergence and trade signals require authorized APIs and backend calculations.
+</p>
+
+</main>
+
+<aside class="side">
+
+<div class="panel">
+<div class="ptitle">NODE ACTIVITY</div>
+<div class="ring">—</div>
+<div class="row"><span>Node-1</span><b>—</b></div>
+<div class="row"><span>Node-2</span><b>—</b></div>
+<div class="row"><span>Node-3</span><b>—</b></div>
+<div class="row"><span>Node-4</span><b>—</b></div>
+<div class="smalltext">Observer: awaiting feeds</div>
 </div>
+
+<div class="panel">
+<div class="ptitle">HAVEN VS RISK</div>
+<div class="row"><span>Gold vs USD</span><b>—</b></div>
+<div class="row"><span>Oil vs risk assets</span><b>—</b></div>
+<div class="smalltext">Cross-market analysis pending</div>
 </div>
+
+<div class="panel">
+<div class="ptitle">HEADLINE FLOW</div>
+<div class="bigmetric">—</div>
+<div class="smalltext">News API not connected</div>
+</div>
+
+<div class="panel">
+<div class="ptitle">RETAIL BUILDUP</div>
+<div class="row"><span>Long %</span><b>—</b></div>
+<div class="row"><span>Short %</span><b>—</b></div>
+<div class="smalltext">Provider coverage varies</div>
+</div>
+
+<div class="panel">
+<div class="ptitle">F&O INSTITUTIONAL</div>
+<div class="row"><span>Long</span><b>—</b></div>
+<div class="row"><span>Short</span><b>—</b></div>
+<div class="smalltext">Indian derivatives feed required</div>
+</div>
+
+</aside>
+</div>
+
 <script>
-let symbol = 'OANDA:XAUUSD';
-let timeframe = '15';
-function loadChart(newSymbol) {
-    symbol = newSymbol;
-    showChart();
+const groups={
+commodities:[
+["GOLD (XAU/USD)","OANDA:XAUUSD"],
+["SILVER (XAG/USD)","OANDA:XAGUSD"],
+["BRENT CRUDE","TVC:UKOIL"],
+["WTI CRUDE","TVC:USOIL"],
+["NATURAL GAS","NYMEX:NG1!"]
+],
+indices:[
+["NIFTY","NSE:NIFTY"],
+["SENSEX","BSE:SENSEX"],
+["BANKNIFTY","NSE:BANKNIFTY"],
+["NASDAQ","NASDAQ:NDX"],
+["S&P 500","SP:SPX"],
+["DOW JONES","DJ:DJI"]
+],
+crypto:[
+["BTC/USD","BITSTAMP:BTCUSD"],
+["ETH/USD","BITSTAMP:ETHUSD"],
+["SOL/USD","COINBASE:SOLUSD"],
+["XRP/USD","BITSTAMP:XRPUSD"]
+],
+forex:[
+["EUR/USD","FX:EURUSD"],
+["GBP/USD","FX:GBPUSD"],
+["USD/JPY","FX:USDJPY"],
+["AUD/USD","FX:AUDUSD"]
+]
+};
+
+let activeSymbol="OANDA:XAUUSD";
+let tf="15";
+
+function makeCard(item){
+const [name,symbol]=item;
+const el=document.createElement("div");
+el.className="market"+(symbol===activeSymbol?" selected":"");
+
+el.innerHTML=`
+<div class="mname">${name}</div>
+<div class="score">—</div>
+<div class="state">DATA PENDING</div>
+<div class="detail">Live sentiment score unavailable</div>
+<div class="divergence">◈ Divergence: awaiting data</div>
+<div class="detail">Select for chart · ${symbol}</div>
+`;
+
+el.onclick=()=>{
+activeSymbol=symbol;
+document.querySelectorAll(".market").forEach(c=>c.classList.remove("selected"));
+el.classList.add("selected");
+renderChart();
+};
+
+return el;
 }
-function changeTF(tf) {
-    timeframe = tf;
-    showChart();
+
+for(const [key,id] of [
+["commodities","commodities"],
+["indices","indices"],
+["crypto","crypto"],
+["forex","forex"]
+]){
+const box=document.getElementById(id);
+groups[key].forEach(x=>box.appendChild(makeCard(x)));
 }
-function showChart() {
-    const chart = document.getElementById('chart');
-    chart.innerHTML = '';
-    const widget = document.createElement('div');
-    widget.className = 'tradingview-widget-container';
-    widget.style.height = '100%';
-    const inner = document.createElement('div');
-    inner.className = 'tradingview-widget-container__widget';
-    inner.style.height = '100%';
-    widget.appendChild(inner);
-    const script = document.createElement('script');
-    script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
-    script.async = true;
-    script.innerHTML = JSON.stringify({
-        autosize: true,
-        symbol: symbol,
-        interval: timeframe,
-        timezone: 'Asia/Kolkata',
-        theme: 'dark',
-        style: '1',
-        locale: 'en',
-        allow_symbol_change: true,
-        calendar: false,
-        support_host: 'https://www.tradingview.com'
-    });
-    widget.appendChild(script);
-    chart.appendChild(widget);
+
+document.querySelectorAll("[data-tf]").forEach(b=>{
+b.onclick=()=>{
+tf=b.dataset.tf;
+document.querySelectorAll("[data-tf]").forEach(x=>x.classList.toggle("active",x===b));
+renderChart();
+};
+});
+
+function renderChart(){
+const box=document.getElementById("chart");
+box.innerHTML="";
+
+const wrap=document.createElement("div");
+wrap.className="tradingview-widget-container";
+wrap.style.height="100%";
+wrap.style.width="100%";
+
+const inner=document.createElement("div");
+inner.className="tradingview-widget-container__widget";
+inner.style.height="100%";
+inner.style.width="100%";
+wrap.appendChild(inner);
+
+const s=document.createElement("script");
+s.src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
+s.async=true;
+
+s.innerHTML=JSON.stringify({
+autosize:true,
+symbol:activeSymbol,
+interval:tf,
+timezone:"Asia/Kolkata",
+theme:"dark",
+style:"1",
+locale:"en",
+allow_symbol_change:true,
+calendar:false,
+withdateranges:true,
+details:true,
+hotlist:false,
+support_host:"https://www.tradingview.com"
+});
+
+wrap.appendChild(s);
+box.appendChild(wrap);
 }
-showChart();
+
+renderChart();
 </script>
+
 </body>
 </html>
