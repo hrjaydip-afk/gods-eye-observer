@@ -4,799 +4,509 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>GOD'S EYE — OBSERVER</title>
-
+<meta name="theme-color" content="#070d16">
+<title>THE GOD'S EYE — OBSERVER</title>
 <style>
-:root {
-  --bg:#070d16;
-  --panel:#101b2b;
-  --cyan:#25d7f2;
-  --green:#35d6a0;
-  --red:#ff6c76;
-  --muted:#8498b1;
-  --line:#26374b;
-  --white:#e8f1fc;
-}
+:root{--bg:#070d16;--panel:#101827;--line:#263449;--cyan:#25d7f2;--green:#35d6a0;--red:#ff6f7d;--amber:#f4b544;--muted:#8798ae;--white:#edf4ff}
 *{box-sizing:border-box}
-body{
- margin:0;
- background:radial-gradient(ellipse at top,#14283d,#070d16 60%);
- color:var(--white);
- font:14px Arial,sans-serif;
+body{margin:0;background:radial-gradient(ellipse at 50% -10%,#142b43 0,#070d16 58%);color:var(--white);font:13px Arial,sans-serif}
+header{padding:18px 24px;border-bottom:1px solid var(--line);background:#080f1a;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{font-size:clamp(21px,3vw,32px);font-weight:900;color:var(--cyan)}
+.brand span{color:#dce9f8;font-size:.68em}
+.tagline{font-size:10px;letter-spacing:2px;color:var(--muted);margin-top:6px}
+.livepill{border:1px solid #24516a;border-radius:30px;padding:8px 12px;color:var(--green)}
+.shell{max-width:1800px;margin:auto;padding:18px;display:grid;grid-template-columns:165px minmax(0,1fr) 165px;gap:18px}
+.rail{display:flex;flex-direction:column;gap:14px;padding-top:48px}
+.box,.market,.sectionbox{background:linear-gradient(145deg,#111d2e,#0b1421);border:1px solid var(--line);border-radius:14px;position:relative;overflow:hidden}
+.box{padding:14px;text-align:center}
+.box:before,.market:before{content:"";position:absolute;left:8px;top:8px;width:14px;height:14px;border-left:2px solid var(--cyan);border-top:2px solid var(--cyan)}
+.box h4{font-size:9px;letter-spacing:1.5px;color:var(--muted);margin:4px 0 12px}
+.metric{font-size:25px;font-weight:900;color:var(--cyan)}
+.sub{font-size:10px;color:var(--muted);line-height:1.5;margin-top:7px}
+main{min-width:0}
+.statusbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:11px 14px;background:#0d1928;border:1px solid var(--line);border-radius:12px;margin-bottom:18px;color:var(--muted);font-size:11px}
+.section-title{display:flex;justify-content:space-between;color:var(--cyan);font-size:12px;font-weight:900;letter-spacing:1.5px;margin:20px 0 11px;text-transform:uppercase}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.market{padding:15px;min-height:156px;cursor:pointer;transition:.15s}
+.market:hover{transform:translateY(-2px);border-color:#3e7790}
+.market.active{outline:2px solid var(--cyan)}
+.mhead{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.mname{font-weight:800;color:#b7c6d9;font-size:11px}
+select,button{background:#0a1421;border:1px solid #344a63;color:#dce9f8;border-radius:7px;padding:6px 8px;font-size:10px;max-width:105px}
+.price{font-size:27px;font-weight:900;margin:17px 0 4px}
+.delta{font-size:11px;font-weight:700}
+.feed{font-size:10px;color:var(--muted);line-height:1.45;margin-top:10px;overflow-wrap:anywhere}
+.state{font-size:10px;font-weight:900;letter-spacing:.7px;margin-top:8px}
+.state.bull{color:var(--green)}
+.state.bear{color:var(--red)}
+.state.neutral{color:#a8b7c9}
+.sectionbox{padding:15px;margin-top:18px}
+.sectionhead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.sectionhead h3{font-size:14px;margin:0}
+.sectionhead small{color:var(--muted)}
+.sentimentgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:13px}
+.sentiment{border:1px solid var(--line);border-radius:10px;padding:13px;background:#0b1421}
+.sentiment b{display:block;font-size:20px;margin:8px 0}
+.sentiment small{color:var(--muted)}
+.bar{height:6px;border-radius:10px;background:#1c2a3d;overflow:hidden;margin-top:10px}
+.bar i{display:block;height:100%;width:0;background:var(--cyan)}
+.twocol{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.placeholder{padding:15px;border:1px dashed #3a4d65;border-radius:10px;color:var(--muted);line-height:1.6;background:#0b1421;margin-top:12px}
+.chart{height:245px;width:100%;display:block;margin-top:12px}
+.indicators{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+.ind{padding:10px;background:#0b1421;border:1px solid var(--line);border-radius:9px}
+.ind small{display:block;color:var(--muted);font-size:9px;margin-bottom:7px}
+.ind b{font-size:13px}
+.footer{color:#6f8199;font-size:10px;line-height:1.6;margin:18px 2px}
+@media(max-width:1100px){
+.shell{grid-template-columns:1fr}
+.rail{padding-top:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+.grid{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
-header{
- padding:20px 24px;
- border-bottom:1px solid var(--line);
- background:#080f1a;
-}
-.brand{
- font-size:clamp(22px,3vw,32px);
- font-weight:bold;
- color:var(--cyan);
-}
-.subtitle{
- font-size:10px;
- letter-spacing:2px;
- color:var(--muted);
- margin-top:5px;
-}
-.shell{
- display:grid;
- grid-template-columns:180px minmax(0,1fr);
- gap:16px;
- max-width:1800px;
- margin:auto;
- padding:16px;
-}
-.side{
- display:flex;
- flex-direction:column;
- gap:14px;
- padding-top:20px;
-}
-.panel{
- background:linear-gradient(145deg,#101b2b,#0a1320);
- border:1px solid var(--line);
- border-radius:14px;
- padding:14px;
-}
-.ptitle{
- font-size:11px;
- color:#8ea4bc;
- text-align:center;
- font-weight:bold;
- margin-bottom:12px;
-}
-.bigmetric{
- text-align:center;
- font-size:23px;
- font-weight:bold;
- color:var(--cyan);
-}
-.smalltext{
- font-size:11px;
- color:var(--muted);
- text-align:center;
-}
-.row{
- display:flex;
- justify-content:space-between;
- gap:8px;
- margin:9px 0;
- font-size:11px;
- color:#9eb0c5;
-}
-.sectionlabel{
- color:var(--cyan);
- font-weight:bold;
- letter-spacing:1.3px;
- font-size:13px;
- margin:18px 0 10px;
-}
-.cards{
- display:grid;
- grid-template-columns:repeat(3,minmax(0,1fr));
- gap:12px;
- margin-bottom:18px;
-}
-.cards.four{
- grid-template-columns:repeat(4,minmax(0,1fr));
-}
-.market{
- min-height:145px;
- padding:15px;
- border-radius:14px;
- background:linear-gradient(145deg,#151f30,#0b1421);
- border:1px solid #33465c;
- cursor:pointer;
-}
-.market.selected{
- outline:2px solid var(--cyan);
-}
-.mname{
- font-size:13px;
- color:#a9bacd;
- font-weight:bold;
-}
-.score{
- font-size:27px;
- font-weight:bold;
- margin-top:12px;
- color:var(--white);
- overflow-wrap:anywhere;
-}
-.state{
- font-size:12px;
- font-weight:bold;
- color:var(--muted);
- margin-top:5px;
-}
-.detail{
- color:#8196ae;
- font-size:11px;
- margin-top:7px;
-}
-.toolbar{
- display:flex;
- gap:8px;
- flex-wrap:wrap;
- margin:10px 0 14px;
-}
-button{
- background:#101e30;
- border:1px solid #29415a;
- color:#b9c9dc;
- padding:10px 15px;
- border-radius:7px;
-}
-button.active{
- border-color:var(--cyan);
- color:var(--cyan);
-}
-#chart{
- height:440px;
- background:#0a1422;
- border:1px solid var(--line);
- border-radius:12px;
- overflow:hidden;
-}
-.lower{
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:14px;
- margin-top:16px;
-}
-h2{font-size:16px}
-table{
- width:100%;
- border-collapse:collapse;
- font-size:11px;
-}
-td,th{
- text-align:left;
- padding:9px 5px;
- border-bottom:1px solid #24364b;
-}
-th{color:#8196ae}
-.disclaimer{
- font-size:10px;
- color:#72869e;
- line-height:1.6;
- margin-top:15px;
-}
-.statusbar{
- display:flex;
- justify-content:space-between;
- flex-wrap:wrap;
- gap:10px;
- padding:12px;
- background:#0c1827;
- border:1px solid var(--line);
- border-radius:10px;
- font-size:11px;
- margin-bottom:12px;
-}
-@media(max-width:1050px){
- .cards.four{grid-template-columns:repeat(2,1fr)}
-}
-@media(max-width:760px){
- .shell{display:flex;flex-direction:column}
- .side{display:grid;grid-template-columns:repeat(2,1fr)}
- .cards,.cards.four{grid-template-columns:repeat(2,1fr)}
- .market{min-height:135px;padding:12px}
- .score{font-size:23px}
- .lower{grid-template-columns:1fr}
- #chart{height:390px}
-}
-@media(max-width:380px){
- .cards,.cards.four{grid-template-columns:1fr}
+@media(max-width:650px){
+header{padding:14px;align-items:flex-start;flex-direction:column}
+.shell{padding:10px;gap:10px}
+.rail{grid-template-columns:repeat(2,minmax(0,1fr))}
+.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.market{padding:11px;min-height:145px}
+.price{font-size:22px}
+.sentimentgrid,.twocol{grid-template-columns:1fr}
+.indicators{grid-template-columns:repeat(2,1fr)}
 }
 </style>
 </head>
-
 <body>
-
 <header>
- <div class="brand">◉ THE GOD'S EYE — OBSERVER</div>
- <div class="subtitle">
- LIVE MARKET INTELLIGENCE · GLOBAL MARKET MONITOR
- </div>
+<div>
+<div class="brand">◉ THE GOD'S EYE <span>— OBSERVER</span></div>
+<div class="tagline">SIGNAL INTELLIGENCE ARRAY · PATTERN RECOGNITION ENGINE</div>
+</div>
+<div class="livepill">● DATA GATEWAY <span id="gateway">CHECKING</span></div>
 </header>
 
 <div class="shell">
-
-<aside class="side">
-
- <div class="panel">
-  <div class="ptitle">SYSTEM STATUS</div>
-  <div class="bigmetric" id="systemStatus">CONNECTING</div>
-  <div class="smalltext" id="systemMessage">Checking API</div>
- </div>
-
- <div class="panel">
-  <div class="ptitle">SIGNAL THROUGHPUT</div>
-  <div class="bigmetric">LIVE</div>
-  <div class="smalltext">Market data monitoring</div>
- </div>
-
- <div class="panel">
-  <div class="ptitle">DOLLAR PULSE</div>
-  <div class="bigmetric">—</div>
-  <div class="smalltext">DXY / US 10Y</div>
-  <div class="row"><span>DXY</span><b>Pending</b></div>
-  <div class="row"><span>US 10Y</span><b>Pending</b></div>
- </div>
-
- <div class="panel">
-  <div class="ptitle">RISK GAUGE</div>
-  <div class="bigmetric">—</div>
-  <div class="smalltext">VIX / Global Risk</div>
- </div>
-
- <div class="panel">
-  <div class="ptitle">OPTIONS / OI PULSE</div>
-  <div class="row"><span>Call OI</span><b>—</b></div>
-  <div class="row"><span>Put OI</span><b>—</b></div>
-  <div class="smalltext">NSE derivatives feed required</div>
- </div>
-
+<aside class="rail">
+<div class="box">
+<h4>SIGNAL THROUGHPUT</h4>
+<div class="metric" id="feedPercent">—</div>
+<div class="sub">Connected quote feeds<br><span id="feedSummary">Checking provider</span></div>
+</div>
+<div class="box">
+<h4>DOLLAR PULSE</h4>
+<div class="metric" id="dollarPulse">—</div>
+<div class="sub">USD proxy feed<br>DXY / US 10Y source required</div>
+</div>
+<div class="box">
+<h4>RISK GAUGE</h4>
+<div class="metric" id="riskGauge" style="font-size:17px">UNAVAILABLE</div>
+<div class="sub">VIX / global risk source required</div>
+</div>
+<div class="box">
+<h4>OPTIONS / OI PULSE</h4>
+<div class="metric" style="font-size:17px">NOT CONNECTED</div>
+<div class="sub">Call OI · Put OI · PCR<br>Licensed NSE derivatives feed required</div>
+</div>
 </aside>
 
 <main>
-
 <div class="statusbar">
- <span id="apiStatus">API: CHECKING</span>
- <span id="lastUpdated">Last update: —</span>
- <span id="liveCount">Live feeds: 0</span>
+<span>API: <b id="apiState" style="color:var(--amber)">CHECKING</b></span>
+<span>Last scan: <b id="updated">—</b></span>
+<span>Live feeds: <b id="feedCount">0</b></span>
+<button id="refresh">↻ REFRESH</button>
 </div>
 
-<div class="sectionlabel">COMMODITIES · USD</div>
-<div class="cards" id="commodities"></div>
+<div class="section-title">Commodities <span>USD · LIVE QUOTES</span></div>
+<div class="grid" id="commodities"></div>
 
-<div class="sectionlabel">INDICES & GLOBAL RISK</div>
-<div class="cards" id="indices"></div>
+<div class="section-title">Indian & Global Indices <span>INDEX FEEDS</span></div>
+<div class="grid" id="indices"></div>
 
-<div class="sectionlabel">CRYPTOCURRENCY</div>
-<div class="cards four" id="crypto"></div>
+<div class="section-title">Cryptocurrency <span>USD</span></div>
+<div class="grid" id="crypto"></div>
 
-<div class="sectionlabel">FOREX MARKETS</div>
-<div class="cards four" id="forex"></div>
+<div class="section-title">Forex <span>MAJOR PAIRS</span></div>
+<div class="grid" id="forex"></div>
 
-<div class="sectionlabel">LIVE TRADINGVIEW CHART</div>
+<section class="sectionbox">
+<div class="sectionhead">
+<h3>◈ MARKET SENTIMENT INTELLIGENCE</h3>
+<small id="sentimentStatus">NEWS SOURCE NOT CONNECTED</small>
+</div>
+<div class="sentimentgrid">
+<div class="sentiment">
+<small>GOLD · XAU/USD</small>
+<b style="color:var(--amber)">AWAITING FEED</b>
+<small>News headlines and sentiment scoring unavailable until a news API is connected.</small>
+<div class="bar"><i></i></div>
+</div>
+<div class="sentiment">
+<small>CRYPTO BUZZ</small>
+<b style="color:var(--amber)">AWAITING FEED</b>
+<small>BTC / ETH / SOL / XRP news coverage not yet connected.</small>
+<div class="bar"><i></i></div>
+</div>
+<div class="sentiment">
+<small>GLOBAL RISK</small>
+<b style="color:var(--amber)">AWAITING FEED</b>
+<small>Risk-on / risk-off scoring requires verified news and volatility data.</small>
+<div class="bar"><i></i></div>
+</div>
+</div>
+</section>
 
-<div class="toolbar">
- <button data-tf="5">M5</button>
- <button data-tf="15" class="active">M15</button>
- <button data-tf="60">H1</button>
- <button data-tf="240">H4</button>
- <button data-tf="D">1D</button>
- </div>
+<section class="sectionbox">
+<div class="sectionhead">
+<div>
+<h3 id="chartTitle">GOLD · XAU/USD</h3>
+<small>Selected instrument · candle history</small>
+</div>
+<div>
+<select id="chartTf">
+<option value="1min">1 Min</option>
+<option value="5min">5 Min</option>
+<option value="15min" selected>15 Min</option>
+<option value="30min">30 Min</option>
+<option value="1h">1 Hour</option>
+<option value="4h">4 Hours</option>
+<option value="1day">1 Day</option>
+</select>
+<button id="loadChart">LOAD</button>
+</div>
+</div>
+<svg id="chart" class="chart" viewBox="0 0 1000 245" preserveAspectRatio="none">
+<text x="500" y="120" text-anchor="middle" fill="#8798ae">Loading market candles…</text>
+</svg>
+<div class="indicators">
+<div class="ind"><small>RSI 14</small><b id="rsi">—</b></div>
+<div class="ind"><small>MACD</small><b id="macd">—</b></div>
+<div class="ind"><small>SMA 20</small><b id="sma">—</b></div>
+<div class="ind"><small>TECHNICAL TREND</small><b id="trend">—</b></div>
+</div>
+</section>
 
-<div id="chart"></div>
-
-<div class="lower">
-
- <div class="panel">
-  <h2>Market Intelligence</h2>
-  <p class="detail">
-   News and sentiment integration pending.
-  </p>
-  <p class="disclaimer">
-   News sentiment requires a licensed news provider.
-  </p>
- </div>
-
- <div class="panel">
-  <h2>Technical Analysis Monitor</h2>
-  <table>
-   <tr><th>INDICATOR</th><th>STATUS</th></tr>
-   <tr><td>RSI / MACD</td><td>Backend available</td></tr>
-   <tr><td>SMA 20/50/200</td><td>Backend available</td></tr>
-   <tr><td>ATR</td><td>Backend available</td></tr>
-   <tr><td>ICT / SMC</td><td>Pending</td></tr>
-   <tr><td>Retail positioning</td><td>Provider required</td></tr>
-   <tr><td>F&O / OI</td><td>Provider required</td></tr>
-  </table>
- </div>
-
+<div class="twocol">
+<section class="sectionbox">
+<div class="sectionhead"><h3>📰 NEWS HEADLINE FLOW</h3><small>NOT CONNECTED</small></div>
+<div class="placeholder">Verified news provider is required before headline count, source links and bullish/bearish news scoring can be displayed.</div>
+</section>
+<section class="sectionbox">
+<div class="sectionhead"><h3>INSTITUTIONAL / RETAIL POSITIONING</h3><small>NOT CONNECTED</small></div>
+<div class="placeholder">COT, exchange positioning and retail long/short ratios require separate licensed data sources. No estimated positioning will be shown as live data.</div>
+</section>
 </div>
 
-<div class="panel" style="margin-top:15px">
- <h2>GOD'S EYE · Data Gateway</h2>
- <div class="row">
-  <span>Gateway</span>
-  <b id="gatewayStatus">Checking</b>
- </div>
- <div class="row">
-  <span>Provider</span>
-  <b>Twelve Data</b>
- </div>
- <div class="row">
-  <span>Automatic refresh</span>
-  <b>20 Minutes</b>
- </div>
- <p class="disclaimer">
-  Market prices are supplied by Twelve Data.
-  Data availability, exchange coverage and delays
-  depend on the provider subscription.
-  This dashboard does not generate guaranteed
-  trading signals or execute trades.
- </p>
+<div class="footer">
+Market quotes and candles are requested from your Cloudflare Worker and Twelve Data account. Some symbols or intervals may be restricted by your subscription. Sentiment, news, options OI, COT and retail positioning are visibly marked unavailable until their respective providers are configured. Technical indicators are informational only and are not BUY/SELL advice.
 </div>
-
 </main>
+
+<aside class="rail">
+<div class="box">
+<h4>NODE ACTIVITY</h4>
+<div class="metric" style="font-size:18px">1 / 4</div>
+<div class="sub">Gateway node active<br>Other nodes not configured</div>
+</div>
+<div class="box">
+<h4>HAVEN VS RISK</h4>
+<div class="metric" style="font-size:16px;color:var(--amber)">PENDING</div>
+<div class="sub">Gold / USD / volatility<br>Verified cross-asset feeds required</div>
+</div>
+<div class="box">
+<h4>HEADLINE FLOW</h4>
+<div class="metric">—</div>
+<div class="sub">No news feed connected</div>
+</div>
+<div class="box">
+<h4>DATA QUALITY</h4>
+<div class="metric" style="font-size:17px">SOURCE-BASED</div>
+<div class="sub">Unavailable feeds are not fabricated</div>
+</div>
+</aside>
 </div>
 
 <script>
+const API="https://gods-eye-api.hrjaydip.workers.dev";
+const tfs=["1min","5min","15min","30min","1h","4h","1day"];
 
-// =====================================
-// GOD'S EYE CONFIGURATION
-// =====================================
+const items=[
+{name:"GOLD (XAU/USD)",symbol:"XAU/USD",group:"commodities",tf:"5min"},
+{name:"SILVER (XAG/USD)",symbol:"XAG/USD",group:"commodities",tf:"15min"},
+{name:"BRENT CRUDE",symbol:"BRENT",group:"commodities",tf:"15min"},
+{name:"WTI CRUDE",symbol:"WTI",group:"commodities",tf:"15min"},
+{name:"NATURAL GAS",symbol:"NG",group:"commodities",tf:"15min",unsupported:true},
+{name:"NIFTY 50",symbol:"NIFTY",group:"indices",tf:"5min",unsupported:true},
+{name:"SENSEX",symbol:"SENSEX",group:"indices",tf:"5min",unsupported:true},
+{name:"BANK NIFTY",symbol:"BANKNIFTY",group:"indices",tf:"5min",unsupported:true},
+{name:"NASDAQ 100",symbol:"NDX",group:"indices",tf:"15min"},
+{name:"S&P 500",symbol:"SPX",group:"indices",tf:"15min"},
+{name:"DOW JONES",symbol:"DJI",group:"indices",tf:"15min",unsupported:true},
+{name:"BTC/USD",symbol:"BTC/USD",group:"crypto",tf:"15min"},
+{name:"ETH/USD",symbol:"ETH/USD",group:"crypto",tf:"15min"},
+{name:"SOL/USD",symbol:"SOL/USD",group:"crypto",tf:"15min",unsupported:true},
+{name:"XRP/USD",symbol:"XRP/USD",group:"crypto",tf:"15min",unsupported:true},
+{name:"EUR/USD",symbol:"EUR/USD",group:"forex",tf:"15min"},
+{name:"GBP/USD",symbol:"GBP/USD",group:"forex",tf:"15min"},
+{name:"USD/JPY",symbol:"USD/JPY",group:"forex",tf:"15min"}
+];
 
-const API_BASE =
- "https://gods-eye-api.hrjaydip.workers.dev";
+let active=items[0],busy=false;
+const el=id=>document.getElementById(id);
 
-const API_SYMBOLS = {
+const safe=s=>String(s).replace(/[&<>"']/g,c=>({
+"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+}[c]));
 
- "OANDA:XAUUSD":"XAU/USD",
- "OANDA:XAGUSD":"XAG/USD",
+const num=x=>Number.isFinite(Number(x))
+?Number(x).toLocaleString("en-US",{maximumFractionDigits:5}):"—";
 
- "TVC:UKOIL":"BRENT",
- "TVC:USOIL":"WTI",
+const tfName=tf=>({
+"1min":"1 Min","5min":"5 Min","15min":"15 Min",
+"30min":"30 Min","1h":"1 Hour","4h":"4 Hours","1day":"1 Day"
+}[tf]||tf);
 
- "NASDAQ:NDX":"NDX",
- "SP:SPX":"SPX",
+function renderCard(m){
+const options=tfs.map(tf=>
+`<option value="${tf}" ${tf===m.tf?"selected":""}>${tfName(tf)}</option>`
+).join("");
 
- "BITSTAMP:BTCUSD":"BTC/USD",
- "BITSTAMP:ETHUSD":"ETH/USD",
-
- "FX:EURUSD":"EUR/USD",
- "FX:GBPUSD":"GBP/USD",
- "FX:USDJPY":"USD/JPY"
-
-};
-
-// =====================================
-// MARKET GROUPS
-// =====================================
-
-const groups = {
-
- commodities:[
-  ["GOLD (XAU/USD)","OANDA:XAUUSD"],
-  ["SILVER (XAG/USD)","OANDA:XAGUSD"],
-  ["BRENT CRUDE","TVC:UKOIL"],
-  ["WTI CRUDE","TVC:USOIL"],
-  ["NATURAL GAS","NYMEX:NG1!"]
- ],
-
- indices:[
-  ["NIFTY 50","NSE:NIFTY"],
-  ["SENSEX","BSE:SENSEX"],
-  ["BANK NIFTY","NSE:BANKNIFTY"],
-  ["NASDAQ 100","NASDAQ:NDX"],
-  ["S&P 500","SP:SPX"],
-  ["DOW JONES","DJ:DJI"]
- ],
-
- crypto:[
-  ["BTC/USD","BITSTAMP:BTCUSD"],
-  ["ETH/USD","BITSTAMP:ETHUSD"],
-  ["SOL/USD","COINBASE:SOLUSD"],
-  ["XRP/USD","BITSTAMP:XRPUSD"]
- ],
-
- forex:[
-  ["EUR/USD","FX:EURUSD"],
-  ["GBP/USD","FX:GBPUSD"],
-  ["USD/JPY","FX:USDJPY"],
-  ["AUD/USD","FX:AUDUSD"]
- ]
-
-};
-
-let activeSymbol = "OANDA:XAUUSD";
-let tf = "15";
-let liveCount = 0;
-let refreshRunning = false;
-
-// =====================================
-// CREATE MARKET CARDS
-// =====================================
-
-function makeCard(item){
-
- const [name,symbol] = item;
-
- const el = document.createElement("div");
-
- el.className =
-  "market" +
-  (symbol === activeSymbol ? " selected" : "");
-
- const apiSymbol = API_SYMBOLS[symbol];
-
- if(apiSymbol){
-  el.dataset.apiSymbol = apiSymbol;
- }
-
- el.innerHTML = `
-  <div class="mname">${name}</div>
-
-  <div class="score">—</div>
-
-  <div class="state">
-   ${apiSymbol ? "CONNECTING LIVE" : "FEED NOT CONNECTED"}
-  </div>
-
-  <div class="detail">
-   ${apiSymbol ? "Twelve Data" : "Licensed provider required"}
-  </div>
-
-  <div class="divergence">
-   ◈ Market monitoring
-  </div>
-
-  <div class="detail">
-   ${symbol}
-  </div>
- `;
-
- el.onclick = () => {
-
-  activeSymbol = symbol;
-
-  document.querySelectorAll(".market")
-   .forEach(c => c.classList.remove("selected"));
-
-  el.classList.add("selected");
-
-  renderChart();
-
- };
-
- return el;
-
+return `<article class="market" data-sym="${safe(m.symbol)}">
+<div class="mhead">
+<span class="mname">${safe(m.name)}</span>
+<select data-tf="${safe(m.symbol)}">${options}</select>
+</div>
+<div class="price" id="p-${safe(m.symbol).replaceAll("/","-")}">—</div>
+<div class="delta" id="d-${safe(m.symbol).replaceAll("/","-")}">Waiting for quote…</div>
+<div class="state neutral" id="s-${safe(m.symbol).replaceAll("/","-")}">
+${m.unsupported?"PROVIDER SYMBOL REQUIRED":"MARKET MONITORING"}
+</div>
+<div class="feed" id="f-${safe(m.symbol).replaceAll("/","-")}">
+${m.unsupported?"This symbol is not enabled in the current Worker allow-list.":`Twelve Data · ${safe(m.symbol)}`}
+</div>
+</article>`;
 }
 
-// =====================================
-// RENDER ALL MARKET CARDS
-// =====================================
-
-for(const [key,id] of [
- ["commodities","commodities"],
- ["indices","indices"],
- ["crypto","crypto"],
- ["forex","forex"]
-]){
-
- const box = document.getElementById(id);
-
- groups[key].forEach(item => {
-  box.appendChild(makeCard(item));
- });
-
+for(const group of ["commodities","indices","crypto","forex"]){
+el(group).innerHTML=items.filter(x=>x.group===group).map(renderCard).join("");
 }
 
-// =====================================
-// HEALTH CHECK
-// =====================================
-
-async function checkAPI(){
-
- try{
-
-  const res = await fetch(
-   API_BASE + "/api/health",
-   {cache:"no-store"}
-  );
-
-  const data = await res.json();
-
-  if(!res.ok || data.status !== "online"){
-   throw new Error("Gateway unavailable");
-  }
-
-  document.getElementById("systemStatus").textContent =
-   "ONLINE";
-
-  document.getElementById("systemStatus").style.color =
-   "var(--green)";
-
-  document.getElementById("systemMessage").textContent =
-   data.apiConfigured ? "API Key Configured" : "API Key Missing";
-
-  document.getElementById("apiStatus").textContent =
-   data.apiConfigured ? "API: CONNECTED" : "API: KEY MISSING";
-
-  document.getElementById("gatewayStatus").textContent =
-   "ONLINE";
-
-  if(!data.apiConfigured){
-   throw new Error("Twelve Data key missing");
-  }
-
-  return true;
-
- }catch(error){
-
-  document.getElementById("systemStatus").textContent =
-   "OFFLINE";
-
-  document.getElementById("systemStatus").style.color =
-   "var(--red)";
-
-  document.getElementById("systemMessage").textContent =
-   error.message;
-
-  document.getElementById("apiStatus").textContent =
-   "API: ERROR";
-
-  document.getElementById("gatewayStatus").textContent =
-   "ERROR";
-
-  return false;
-
- }
-
-}
-
-// =====================================
-// LIVE QUOTE FETCH
-// =====================================
-
-async function refreshLiveQuotes(){
-
- if(refreshRunning) return;
-
- refreshRunning = true;
-
- liveCount = 0;
-
- try{
-
-  const cards = document.querySelectorAll(
-   ".market[data-api-symbol]"
-  );
-
-  // Sequential requests reduce API request bursts.
-
-  for(const card of cards){
-
-   const symbol = card.dataset.apiSymbol;
-
-   const priceEl = card.querySelector(".score");
-   const stateEl = card.querySelector(".state");
-   const detailEl = card.querySelector(".detail");
-
-   try{
-
-    const url =
-     API_BASE +
-     "/api/quote?symbol=" +
-     encodeURIComponent(symbol);
-
-    const res = await fetch(url,{
-     cache:"no-store"
-    });
-
-    const result = await res.json();
-
-    if(!res.ok || !result.success){
-     throw new Error(
-      result.error || "Price unavailable"
-     );
-    }
-
-    const q = result.data || {};
-
-    const price = Number(q.close || q.price);
-
-    if(!Number.isFinite(price)){
-     throw new Error("Invalid price");
-    }
-
-    const change = Number(q.change || 0);
-
-    const percent = q.percent_change;
-
-    priceEl.textContent =
-     price.toLocaleString("en-US",{
-      minimumFractionDigits:2,
-      maximumFractionDigits:5
-     });
-
-    priceEl.style.color =
-     change >= 0 ? "var(--green)" : "var(--red)";
-
-    stateEl.textContent =
-     (change >= 0 ? "▲ " : "▼ ") +
-     (percent !== undefined ? percent + "%" : "LIVE");
-
-    stateEl.style.color =
-     change >= 0 ? "var(--green)" : "var(--red)";
-
-    detailEl.textContent =
-     "Twelve Data · " +
-     (q.datetime || "Latest quote");
-
-    card.dataset.live = "true";
-
-    liveCount++;
-
-   }catch(error){
-
-    stateEl.textContent = "FEED ERROR";
-
-    stateEl.style.color = "var(--red)";
-
-    detailEl.textContent = error.message;
-
-    card.dataset.live = "false";
-
-   }
-
-  }
-
-  document.getElementById("liveCount").textContent =
-   "Live feeds: " + liveCount;
-
-  document.getElementById("lastUpdated").textContent =
-   "Last update: " + new Date().toLocaleTimeString();
-
- }finally{
-
-  refreshRunning = false;
-
- }
-
-}
-
-// =====================================
-// TRADINGVIEW CHART
-// =====================================
-
-function renderChart(){
-
- const box = document.getElementById("chart");
-
- box.innerHTML = "";
-
- const wrap = document.createElement("div");
-
- wrap.className = "tradingview-widget-container";
-
- wrap.style.height = "100%";
- wrap.style.width = "100%";
-
- const inner = document.createElement("div");
-
- inner.className =
-  "tradingview-widget-container__widget";
-
- inner.style.height = "100%";
- inner.style.width = "100%";
-
- wrap.appendChild(inner);
-
- const script = document.createElement("script");
-
- script.src =
-  "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
-
- script.async = true;
-
- script.innerHTML = JSON.stringify({
-
-  autosize:true,
-
-  symbol:activeSymbol,
-
-  interval:tf,
-
-  timezone:"Asia/Kolkata",
-
-  theme:"dark",
-
-  style:"1",
-
-  locale:"en",
-
-  allow_symbol_change:true,
-
-  calendar:false,
-
-  withdateranges:true,
-
-  details:true,
-
-  hotlist:false,
-
-  support_host:"https://www.tradingview.com"
-
- });
-
- wrap.appendChild(script);
-
- box.appendChild(wrap);
-
-}
-
-// =====================================
-// TIMEFRAME BUTTONS
-// =====================================
-
-document.querySelectorAll("[data-tf]").forEach(button => {
-
- button.onclick = () => {
-
-  tf = button.dataset.tf;
-
-  document.querySelectorAll("[data-tf]")
-   .forEach(b => {
-    b.classList.toggle("active",b === button);
-   });
-
-  renderChart();
-
- };
-
+document.querySelectorAll(".market").forEach(card=>{
+card.addEventListener("click",e=>{
+if(e.target.tagName==="SELECT")return;
+active=items.find(x=>x.symbol===card.dataset.sym);
+selectActive();
+});
 });
 
-// =====================================
-// START GOD'S EYE
-// =====================================
+document.querySelectorAll("select[data-tf]").forEach(s=>{
+s.addEventListener("change",()=>{
+const m=items.find(x=>x.symbol===s.dataset.tf);
+m.tf=s.value;
+if(active.symbol===m.symbol){
+el("chartTf").value=m.tf;
+loadChart();
+}
+});
+});
 
-async function startDashboard(){
+el("chartTf").addEventListener("change",()=>{
+active.tf=el("chartTf").value;
+const s=document.querySelector(`select[data-tf="${CSS.escape(active.symbol)}"]`);
+if(s)s.value=active.tf;
+});
 
- renderChart();
+el("loadChart").onclick=loadChart;
+el("refresh").onclick=refresh;
 
- const connected = await checkAPI();
-
- if(connected){
-
-  await refreshLiveQuotes();
-
-  // Refresh every 20 minutes.
-  // This helps conserve API credits.
-
-  setInterval(async () => {
-
-   const ok = await checkAPI();
-
-   if(ok){
-    await refreshLiveQuotes();
-   }
-
-  },20 * 60 * 1000);
-
- }
-
+function ids(m){
+const k=m.symbol.replaceAll("/","-");
+return{
+p:el("p-"+k),d:el("d-"+k),
+s:el("s-"+k),f:el("f-"+k)
+};
 }
 
-startDashboard();
+async function request(path){
+const r=await fetch(API+path,{cache:"no-store"});
+const j=await r.json();
+if(!r.ok||j.error||j.success===false)
+throw Error(j.error||"Provider request failed");
+return j;
+}
 
+async function health(){
+try{
+const h=await request("/api/health");
+el("gateway").textContent=h.apiConfigured?"ONLINE":"KEY MISSING";
+el("apiState").textContent=h.apiConfigured?"CONNECTED":"API KEY MISSING";
+el("apiState").style.color=h.apiConfigured?"var(--green)":"var(--red)";
+}catch(e){
+el("gateway").textContent="OFFLINE";
+el("apiState").textContent="OFFLINE";
+el("apiState").style.color="var(--red)";
+}
+}
+
+async function quote(m){
+const x=ids(m);
+
+if(m.unsupported){
+x.f.textContent="Not enabled in current Worker symbol allow-list. Requires backend/provider configuration.";
+return false;
+}
+
+try{
+const r=await request("/api/quote?symbol="+encodeURIComponent(m.symbol));
+const q=r.data||{};
+const v=Number(q.close||q.price||q.last);
+
+x.p.textContent=num(v);
+m.price=v;
+
+const ch=Number(q.percent_change??q.change_percent);
+
+if(Number.isFinite(ch)){
+x.d.textContent=(ch>=0?"▲ ":"▼ ")+ch.toFixed(3)+"%";
+x.d.style.color=ch>=0?"var(--green)":"var(--red)";
+m.change=ch;
+}else{
+x.d.textContent="Quote received";
+x.d.style.color="var(--muted)";
+}
+
+x.s.textContent="LIVE PRICE";
+x.s.className="state neutral";
+x.f.textContent=`Twelve Data · ${q.datetime||"Latest"} · ${m.symbol}`;
+
+return Number.isFinite(v);
+
+}catch(e){
+x.p.textContent="—";
+x.d.textContent="FEED ERROR";
+x.d.style.color="var(--red)";
+x.s.textContent="FEED UNAVAILABLE";
+x.s.className="state bear";
+x.f.textContent=e.message;
+return false;
+}
+}
+
+async function refresh(){
+if(busy)return;
+
+busy=true;
+el("refresh").disabled=true;
+
+await health();
+
+let good=0,checked=0;
+
+for(const m of items){
+if(!m.unsupported){
+checked++;
+if(await quote(m))good++;
+}
+await new Promise(r=>setTimeout(r,220));
+}
+
+el("feedCount").textContent=good+" / "+checked;
+el("feedPercent").textContent=checked?Math.round(good/checked*100)+"%":"—";
+el("feedSummary").textContent=good+" verified feeds";
+el("updated").textContent=new Date().toLocaleTimeString();
+
+const usd=items.find(x=>x.symbol==="EUR/USD");
+
+el("dollarPulse").textContent=
+usd&&Number.isFinite(usd.change)
+?(usd.change>0?"+":"")+usd.change.toFixed(2)+"%":"—";
+
+busy=false;
+el("refresh").disabled=false;
+}
+
+function selectActive(){
+document.querySelectorAll(".market").forEach(c=>
+c.classList.toggle("active",c.dataset.sym===active.symbol)
+);
+
+el("chartTitle").textContent=active.name+" · "+active.symbol;
+el("chartTf").value=active.tf;
+loadChart();
+}
+
+function draw(candles){
+const svg=el("chart");
+const v=candles.map(x=>Number(x.close)).filter(Number.isFinite);
+
+if(v.length<2){
+svg.innerHTML='<text x="500" y="120" text-anchor="middle" fill="#8798ae">Not enough candle data</text>';
+return;
+}
+
+const min=Math.min(...v);
+const max=Math.max(...v);
+const pad=(max-min)*.1||1;
+const lo=min-pad,hi=max+pad;
+
+const points=v.map((z,i)=>
+`${20+i*960/(v.length-1)},${225-(z-lo)/(hi-lo)*200}`
+).join(" ");
+
+svg.innerHTML=`
+<g stroke="#263449" stroke-width="1">
+<path d="M20 25H980M20 125H980M20 225H980"/>
+</g>
+<polyline points="${points}" fill="none" stroke="#25d7f2"
+stroke-width="2.5" vector-effect="non-scaling-stroke"/>
+<text x="25" y="17" fill="#8798ae" font-size="11">${num(max)}</text>
+<text x="25" y="241" fill="#8798ae" font-size="11">${num(min)}</text>
+<text x="975" y="17" text-anchor="end" fill="#edf4ff" font-size="12">Last ${num(v.at(-1))}</text>`;
+}
+
+async function loadChart(){
+el("chartTf").value=active.tf;
+
+if(active.unsupported){
+el("chart").innerHTML=
+'<text x="500" y="120" text-anchor="middle" fill="#ff6f7d">This symbol is not configured in the current Worker.</text>';
+return;
+}
+
+try{
+const r=await request(
+`/api/time_series?symbol=${encodeURIComponent(active.symbol)}&interval=${encodeURIComponent(active.tf)}`
+);
+
+draw(r.candles||[]);
+
+try{
+const a=(await request(
+`/api/analyze?symbol=${encodeURIComponent(active.symbol)}&interval=${encodeURIComponent(active.tf)}`
+)).analysis||{};
+
+el("rsi").textContent=a.RSI14??"—";
+el("macd").textContent=a.MACD??"—";
+el("sma").textContent=a.SMA20??"—";
+el("trend").textContent=a.trend??"—";
+
+el("trend").style.color=
+a.trend==="BULLISH"?"var(--green)":
+a.trend==="BEARISH"?"var(--red)":"var(--white)";
+
+}catch(e){
+["rsi","macd","sma","trend"].forEach(k=>el(k).textContent="—");
+}
+
+}catch(e){
+el("chart").innerHTML=
+`<text x="500" y="120" text-anchor="middle" fill="#ff6f7d">${safe(e.message)}</text>`;
+}
+}
+
+health();
+refresh();
+selectActive();
+setInterval(refresh,60000);
 </script>
-
 </body>
 </html>
