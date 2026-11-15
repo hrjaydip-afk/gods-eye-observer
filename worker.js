@@ -1,5 +1,5 @@
 
-const VERSION = "0.4.0";
+const VERSION = "0.4.1";
 
 const ALLOWED_SYMBOLS = [
   "XAU/USD", "XAG/USD", "EUR/USD", "GBP/USD",
@@ -29,7 +29,7 @@ function response(data, status = 200) {
   });
 }
 
-// ---------- MARKET DATA ----------
+// MARKET DATA
 
 async function twelveData(path, params, env) {
   if (!env.TD_API_KEY) {
@@ -58,7 +58,7 @@ async function twelveData(path, params, env) {
   return data;
 }
 
-// ---------- TECHNICAL INDICATORS ----------
+// TECHNICAL INDICATORS
 
 function calculateRSI(values, period = 14) {
   if (values.length <= period) return null;
@@ -186,7 +186,7 @@ function analyze(candles) {
   };
 }
 
-// ---------- NEWS SENTIMENT ----------
+// NEWS SENTIMENT
 
 function buildGdeltQuery(symbol) {
   const queries = {
@@ -267,7 +267,7 @@ function scoreHeadline(title) {
   return Math.max(-2, Math.min(2, score));
 }
 
-// ---------- FINNHUB NEWS ----------
+// FINNHUB NEWS
 
 async function getFinnhubNews(symbol, env) {
   if (!env.FINNHUB_API_KEY) {
@@ -308,7 +308,7 @@ async function getFinnhubNews(symbol, env) {
     }));
 }
 
-// ---------- GDELT NEWS ----------
+// GDELT NEWS
 
 async function getGdeltNews(symbol) {
   const url = new URL(
@@ -365,7 +365,7 @@ async function getGdeltNews(symbol) {
     .filter(item => item.title);
 }
 
-// ---------- SENTIMENT ENGINE ----------
+// SENTIMENT ENGINE
 
 async function getSentiment(symbol, env) {
   const results = await Promise.allSettled([
@@ -455,10 +455,11 @@ async function getSentiment(symbol, env) {
   };
 }
 
-// ---------- REQUEST HANDLER ----------
+// REQUEST HANDLER
 
 export default {
   async fetch(request, env) {
+
     if (request.method === "OPTIONS") {
       return new Response(null, {
         headers: corsHeaders
@@ -475,13 +476,21 @@ export default {
     const path = url.pathname;
 
     try {
+
+      // HEALTH CHECK
+
       if (path === "/api/health") {
         return response({
           status: "online",
           service: "GODS EYE DATA GATEWAY",
           version: VERSION,
+
+          // Dashboard health status fix
+          apiConfigured: Boolean(env.TD_API_KEY),
+
           twelveDataConfigured: Boolean(env.TD_API_KEY),
           finnhubConfigured: Boolean(env.FINNHUB_API_KEY),
+
           timestamp: new Date().toISOString()
         });
       }
@@ -496,10 +505,14 @@ export default {
         }, 400);
       }
 
+      // SENTIMENT
+
       if (path === "/api/sentiment") {
         const result = await getSentiment(symbol, env);
         return response(result);
       }
+
+      // LIVE QUOTE
 
       if (path === "/api/quote") {
         const data = await twelveData(
@@ -516,10 +529,13 @@ export default {
         });
       }
 
+      // CANDLES / ANALYSIS
+
       if (
         path === "/api/time_series" ||
         path === "/api/analyze"
       ) {
+
         const interval =
           url.searchParams.get("interval") || "15min";
 
@@ -588,6 +604,8 @@ export default {
         });
       }
 
+      // UNKNOWN ENDPOINT
+
       return response({
         error: "Endpoint not found",
         endpoints: [
@@ -600,11 +618,13 @@ export default {
       }, 404);
 
     } catch (error) {
+
       return response({
         success: false,
         error: error.message,
         timestamp: new Date().toISOString()
       }, 500);
+
     }
   }
 };
