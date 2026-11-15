@@ -1,5 +1,5 @@
 
-const VERSION = "0.3.0";
+const VERSION = "0.4.0";
 
 const ALLOWED_SYMBOLS = [
   "XAU/USD", "XAG/USD", "EUR/USD", "GBP/USD",
@@ -68,7 +68,6 @@ function calculateRSI(values, period = 14) {
 
   for (let i = 1; i <= period; i++) {
     const change = values[i] - values[i - 1];
-
     gains += Math.max(change, 0);
     losses += Math.max(-change, 0);
   }
@@ -183,9 +182,7 @@ function analyze(candles) {
             : "NEUTRAL",
 
     tradingSignal: "DISABLED",
-
-    note:
-      "Technical analysis only. No automatic trade execution."
+    note: "Technical analysis only. No automatic trade execution."
   };
 }
 
@@ -206,7 +203,11 @@ function buildGdeltQuery(symbol) {
     "NDX": "Nasdaq OR technology stocks"
   };
 
-  return queries[symbol] || symbol;
+  const query = queries[symbol] || symbol;
+
+  return query.includes(" OR ")
+    ? `(${query})`
+    : query;
 }
 
 function getNewsTerms(symbol) {
@@ -283,7 +284,9 @@ async function getFinnhubNews(symbol, env) {
   const res = await fetch(url);
 
   if (!res.ok) {
-    throw new Error("Finnhub request failed");
+    throw new Error(
+      `Finnhub request failed: HTTP ${res.status}`
+    );
   }
 
   const data = await res.json();
@@ -320,22 +323,46 @@ async function getGdeltNews(symbol) {
   url.searchParams.set("mode", "ArtList");
   url.searchParams.set("format", "json");
   url.searchParams.set("maxrecords", "30");
+  url.searchParams.set("timespan", "7d");
   url.searchParams.set("sort", "DateDesc");
 
-  const res = await fetch(url);
+  const res = await fetch(url, {
+    headers: {
+      "Accept": "application/json"
+    }
+  });
 
   if (!res.ok) {
-    throw new Error("GDELT request failed");
+    throw new Error(
+      `GDELT request failed: HTTP ${res.status}`
+    );
+  }
+
+  const contentType =
+    res.headers.get("content-type") || "";
+
+  if (!contentType.includes("application/json")) {
+    const body = (await res.text()).slice(0, 180);
+    throw new Error(
+      `GDELT returned non-JSON response: ${body}`
+    );
   }
 
   const data = await res.json();
 
-  return (data.articles || []).map(item => ({
-    source: "GDELT",
-    title: item.title || "",
-    url: item.url || "",
-    datetime: item.seendate || null
-  })).filter(item => item.title);
+  if (!Array.isArray(data.articles)) return [];
+
+  return data.articles
+    .filter(item =>
+      isRelevant(item.title, symbol)
+    )
+    .map(item => ({
+      source: "GDELT",
+      title: item.title || "",
+      url: item.url || "",
+      datetime: item.seendate || null
+    }))
+    .filter(item => item.title);
 }
 
 // ---------- SENTIMENT ENGINE ----------
@@ -353,11 +380,10 @@ async function getSentiment(symbol, env) {
     if (result.status === "fulfilled") {
       news.push(...result.value);
     } else {
-      errors.push(
-        index === 0
-          ? "Finnhub unavailable"
-          : "GDELT unavailable"
-      );
+      errors.push({
+        source: index === 0 ? "Finnhub" : "GDELT",
+        message: result.reason?.message || "Unavailable"
+      });
     }
   });
 
@@ -449,8 +475,6 @@ export default {
     const path = url.pathname;
 
     try {
-      // HEALTH CHECK
-
       if (path === "/api/health") {
         return response({
           status: "online",
@@ -472,14 +496,10 @@ export default {
         }, 400);
       }
 
-      // SENTIMENT
-
       if (path === "/api/sentiment") {
         const result = await getSentiment(symbol, env);
         return response(result);
       }
-
-      // LIVE QUOTE
 
       if (path === "/api/quote") {
         const data = await twelveData(
@@ -495,8 +515,6 @@ export default {
           lastUpdated: new Date().toISOString()
         });
       }
-
-      // CANDLES AND ANALYSIS
 
       if (
         path === "/api/time_series" ||
@@ -546,7 +564,9 @@ export default {
           !Number.isFinite(c.low) ||
           !Number.isFinite(c.close)
         )) {
-          throw new Error("Invalid candle values received");
+          throw new Error(
+            "Invalid candle values received"
+          );
         }
 
         if (path === "/api/time_series") {
