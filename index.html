@@ -1,68 +1,762 @@
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#070d16">
-<title>THE GOD'S EYE — OBSERVER</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#070b14">
+<title>THE GOD'S EYE — SENTIMENT OBSERVER</title>
+
 <style>
-:root{--bg:#070d16;--line:#26364b;--cyan:#25d7f2;--green:#35d6a0;--red:#ff6878;--muted:#8798ae;--white:#edf4ff;--amber:#f4b544}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -12%,#18324d 0,#070d16 60%);color:var(--white);font:13px Arial,sans-serif}
-header{padding:18px 24px;border-bottom:1px solid var(--line);background:#080f1a;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.brand{font-size:clamp(22px,3vw,34px);font-weight:900;color:var(--cyan)}.brand span{color:#dce9f8;font-size:.62em}.tag{font-size:10px;letter-spacing:2px;color:var(--muted);margin-top:6px}.pill{border:1px solid #24516a;border-radius:30px;padding:9px 13px;color:var(--green)}
-.layout{max-width:1800px;margin:auto;padding:18px;display:grid;grid-template-columns:165px minmax(0,1fr) 165px;gap:16px}.rail{display:flex;flex-direction:column;gap:13px;padding-top:42px}.box,.card,.panel{background:linear-gradient(145deg,#111e30,#0b1421);border:1px solid var(--line);border-radius:14px;position:relative;overflow:hidden}.box{padding:14px;text-align:center}.box:before,.card:before{content:"";position:absolute;left:8px;top:8px;width:14px;height:14px;border-left:2px solid var(--cyan);border-top:2px solid var(--cyan)}.box h4{font-size:9px;letter-spacing:1.5px;color:var(--muted);margin:4px 0 12px}.metric{font-size:23px;font-weight:900;color:var(--cyan)}.sub{font-size:10px;color:var(--muted);line-height:1.5;margin-top:7px}
-main{min-width:0}.status{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:11px 14px;background:#0d1928;border:1px solid var(--line);border-radius:12px;color:var(--muted);font-size:11px}.section-title{display:flex;justify-content:space-between;color:var(--cyan);font-size:12px;font-weight:900;letter-spacing:1.5px;margin:22px 0 11px;text-transform:uppercase}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.grid.crypto{grid-template-columns:repeat(4,minmax(0,1fr))}.card{padding:16px;min-height:152px}.card.bear{border-color:#874650;box-shadow:inset 0 0 22px #7d303044}.card.bull{border-color:#28765f;box-shadow:inset 0 0 22px #1d775544}.card.neutral{border-color:#536176}.name{font-weight:800;color:#b7c6d9;font-size:12px}.price{font-size:29px;font-weight:900;margin:14px 0 3px}.change{font-size:11px;font-weight:800}.positive{color:var(--green)}.negative{color:var(--red)}.state{font-size:10px;font-weight:900;margin-top:8px;color:#a8b7c9}.subline{font-size:10px;color:var(--muted);margin-top:7px;line-height:1.4}.badge{display:inline-block;border:1px solid #344a63;border-radius:20px;padding:3px 7px;font-size:9px;color:var(--muted);margin-top:8px}.unavailable{color:var(--amber)}
-.panel{padding:15px;margin-top:17px}.panelhead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.panelhead h3{margin:0;font-size:14px}.panelhead small,.meta{color:var(--muted)}.newslist{margin-top:12px}.newsitem{padding:10px 0;border-bottom:1px solid var(--line);line-height:1.45}.newsitem a{color:var(--cyan);text-decoration:none}.meta{font-size:10px;margin-top:5px}.trend{width:100%;height:260px;display:block;margin-top:12px}.twocol{display:grid;grid-template-columns:1fr 1fr;gap:12px}.hint{padding:14px;border:1px dashed #3a4d65;border-radius:10px;color:var(--muted);line-height:1.6;margin-top:12px}button,select{background:#0a1421;border:1px solid #344a63;color:var(--white);border-radius:7px;padding:8px 12px;cursor:pointer}button:disabled{opacity:.5}.footer{font-size:10px;color:#6f8199;line-height:1.6;margin:18px 2px}
-@media(max-width:1050px){.layout{grid-template-columns:1fr}.rail{padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:650px){header{padding:14px}.layout{padding:10px;gap:10px}.rail{grid-template-columns:repeat(2,minmax(0,1fr))}.grid,.grid.crypto{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.card{padding:12px;min-height:138px}.price{font-size:24px}.twocol{grid-template-columns:1fr}}
+:root {
+  --bg:#070b14;
+  --panel:#0d1524;
+  --line:#26364c;
+  --cyan:#35d9f2;
+  --muted:#8795aa;
+  --text:#e8f0fc;
+  --red:#ff6574;
+  --green:#37d6a0;
+  --amber:#f3b64d;
+}
+* {box-sizing:border-box}
+body {
+  margin:0;
+  background:radial-gradient(ellipse at 50% 0,#142941 0,#070b14 65%);
+  color:var(--text);
+  font:13px Arial,sans-serif;
+}
+header {
+  padding:18px 24px 15px;
+  border-bottom:1px solid var(--line);
+  background:#080e19;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:14px;
+  flex-wrap:wrap;
+}
+.brand {
+  font-size:clamp(22px,3vw,34px);
+  font-weight:900;
+  color:var(--cyan);
+}
+.brand span {font-size:.58em;color:#dce7f6}
+.tag {
+  font-size:10px;
+  letter-spacing:2px;
+  color:var(--muted);
+  margin-top:6px;
+}
+.online {
+  border:1px solid #24536a;
+  color:var(--green);
+  border-radius:30px;
+  padding:9px 14px;
+  font-size:11px;
+}
+.layout {
+  max-width:1800px;
+  margin:auto;
+  padding:17px;
+  display:grid;
+  grid-template-columns:165px minmax(0,1fr) 165px;
+  gap:15px;
+}
+.rail {
+  display:flex;
+  flex-direction:column;
+  gap:13px;
+  padding-top:34px;
+}
+.panel,.side,.signal {
+  background:linear-gradient(145deg,#111d30,#0a1220);
+  border:1px solid var(--line);
+  border-radius:13px;
+  position:relative;
+  overflow:hidden;
+}
+.side {
+  padding:14px;
+  text-align:center;
+}
+.side h4 {
+  margin:3px 0 12px;
+  font-size:9px;
+  letter-spacing:1.6px;
+  color:var(--muted);
+}
+.big {
+  font-size:23px;
+  font-weight:900;
+  color:var(--cyan);
+}
+.small {
+  font-size:10px;
+  color:var(--muted);
+  line-height:1.5;
+  margin-top:7px;
+}
+main {min-width:0}
+.toolbar {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  padding:11px 14px;
+  border:1px solid var(--line);
+  border-radius:11px;
+  background:#0d1726;
+  color:var(--muted);
+  font-size:11px;
+}
+button {
+  background:#0a1422;
+  border:1px solid #35516a;
+  color:var(--cyan);
+  border-radius:7px;
+  padding:9px 13px;
+  font-weight:700;
+  cursor:pointer;
+}
+button:disabled {opacity:.5;cursor:wait}
+.section {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin:22px 0 11px;
+  color:var(--cyan);
+  font-weight:900;
+  font-size:12px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+}
+.cards {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+}
+.cards.crypto {
+  grid-template-columns:repeat(4,minmax(0,1fr));
+}
+.signal {
+  padding:15px;
+  min-height:168px;
+}
+.signal:before,.side:before {
+  content:"";
+  position:absolute;
+  left:8px;
+  top:8px;
+  width:14px;
+  height:14px;
+  border-left:2px solid var(--cyan);
+  border-top:2px solid var(--cyan);
+}
+.signal.bear {
+  border-color:#9b4b59;
+  box-shadow:inset 0 0 25px #7f263b44;
+}
+.signal.bull {
+  border-color:#2c826a;
+  box-shadow:inset 0 0 25px #14785833;
+}
+.signal.neutral {border-color:#52627a}
+.symbol {
+  font-size:12px;
+  font-weight:800;
+  color:#c1cddd;
+}
+.score {
+  font-size:32px;
+  font-weight:900;
+  margin:13px 0 2px;
+}
+.bear .score {color:var(--red)}
+.bull .score {color:var(--green)}
+.neutral .score {color:#b8c5d7}
+.bias {
+  font-size:11px;
+  font-weight:900;
+  margin-top:4px;
+}
+.bear .bias {color:var(--red)}
+.bull .bias {color:var(--green)}
+.neutral .bias {color:#bac6d6}
+.spark {
+  display:block;
+  width:100%;
+  height:31px;
+  margin-top:7px;
+}
+.spark polyline {
+  fill:none;
+  stroke:var(--cyan);
+  stroke-width:2;
+}
+.bear .spark polyline {stroke:var(--red)}
+.bull .spark polyline {stroke:var(--green)}
+.details {
+  font-size:10px;
+  color:var(--muted);
+  margin-top:6px;
+  line-height:1.45;
+}
+.confidence {
+  display:inline-block;
+  border:1px solid #40536b;
+  border-radius:20px;
+  padding:3px 7px;
+  margin-top:8px;
+  font-size:9px;
+  color:var(--muted);
+}
+.panel {
+  padding:15px;
+  margin-top:16px;
+}
+.panelhead {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.panelhead h3 {margin:0;font-size:14px}
+.panelhead small {font-size:10px;color:var(--muted)}
+.chart {
+  width:100%;
+  height:270px;
+  display:block;
+  margin-top:10px;
+}
+.legend {
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-top:9px;
+  font-size:10px;
+  color:var(--muted);
+}
+.legend span:before {
+  content:"";
+  display:inline-block;
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:var(--dot);
+  margin-right:5px;
+}
+.newsgrid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+.news {
+  padding:15px;
+  margin-top:16px;
+  background:linear-gradient(145deg,#111d30,#0a1220);
+  border:1px solid var(--line);
+  border-radius:13px;
+}
+.news h3 {font-size:14px;margin:0}
+.items {margin-top:10px}
+.item {
+  padding:9px 0;
+  border-bottom:1px solid var(--line);
+  line-height:1.45;
+}
+.item a {color:var(--cyan);text-decoration:none}
+.item small {
+  display:block;
+  color:var(--muted);
+  font-size:10px;
+  margin-top:4px;
+}
+.notice {
+  color:var(--muted);
+  border:1px dashed #40516a;
+  padding:12px;
+  border-radius:9px;
+  margin-top:10px;
+  line-height:1.5;
+  font-size:11px;
+}
+.footer {
+  font-size:10px;
+  color:#72839b;
+  line-height:1.6;
+  margin:17px 2px;
+}
+@media(max-width:1050px) {
+  .layout {grid-template-columns:1fr}
+  .rail {
+    padding:0;
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+  }
+}
+@media(max-width:650px) {
+  header {padding:14px}
+  .layout {padding:10px;gap:10px}
+  .rail {grid-template-columns:repeat(2,minmax(0,1fr))}
+  .cards,.cards.crypto {
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px;
+  }
+  .signal {padding:12px;min-height:155px}
+  .score {font-size:28px}
+  .newsgrid {grid-template-columns:1fr}
+}
 </style>
 </head>
+
 <body>
-<header><div><div class="brand">◉ THE GOD'S EYE <span>— OBSERVER</span></div><div class="tag">SIGNAL INTELLIGENCE ARRAY · PATTERN RECOGNITION ENGINE</div></div><div class="pill">● OBSERVER <span id="gateway">CONNECTING</span></div></header>
+
+<header>
+  <div>
+    <div class="brand">◉ THE GOD'S EYE <span>— OBSERVER</span></div>
+    <div class="tag">SENTIMENT INTELLIGENCE ARRAY · PATTERN RECOGNITION ENGINE</div>
+  </div>
+  <div class="online">● OBSERVER <span id="online">CONNECTING</span></div>
+</header>
+
 <div class="layout">
+
 <aside class="rail">
-<div class="box"><h4>SIGNAL THROUGHPUT</h4><div class="metric" id="throughput">—</div><div class="sub">Verified quote feeds<br><span id="sourceState">Checking</span></div></div>
-<div class="box"><h4>DOLLAR PULSE</h4><div class="metric">—</div><div class="sub">DXY source not connected</div></div>
-<div class="box"><h4>RISK GAUGE</h4><div class="metric" id="risk">—</div><div class="sub">Based on connected sentiment only</div></div>
-<div class="box"><h4>INSIDER OPTIONS</h4><div class="metric unavailable" style="font-size:15px">NOT CONNECTED</div><div class="sub">Licensed option-flow source required</div></div>
-<div class="box"><h4>PCR / OI DATA</h4><div class="metric unavailable" style="font-size:15px">NOT CONNECTED</div><div class="sub">Verified NSE option-chain feed required</div></div>
+  <div class="side">
+    <h4>SIGNAL THROUGHPUT</h4>
+    <div class="big" id="throughput">—</div>
+    <div class="small" id="feedCount">Waiting for sentiment feeds</div>
+  </div>
+
+  <div class="side">
+    <h4>DOLLAR PULSE</h4>
+    <div class="big">—</div>
+    <div class="small">DXY sentiment source not connected</div>
+  </div>
+
+  <div class="side">
+    <h4>RISK GAUGE</h4>
+    <div class="big" id="risk">—</div>
+    <div class="small">Based on available headline sentiment</div>
+  </div>
+
+  <div class="side">
+    <h4>INSIDER OPTIONS</h4>
+    <div class="big" style="font-size:14px;color:var(--amber)">NOT CONNECTED</div>
+    <div class="small">Verified option-flow provider required</div>
+  </div>
+
+  <div class="side">
+    <h4>PCR / OI DATA</h4>
+    <div class="big" style="font-size:14px;color:var(--amber)">NOT CONNECTED</div>
+    <div class="small">Verified NSE option-chain feed required</div>
+  </div>
 </aside>
+
 <main>
-<div class="status"><span>DATA GATEWAY: <b id="apiState">CHECKING</b></span><span>LAST UPDATE: <b id="updated">—</b></span><button id="refresh">↻ REFRESH LIVE DATA</button></div>
-<div class="section-title">Commodities (USD)<span>LIVE PRICE + SENTIMENT</span></div><div class="grid" id="commodities"></div>
-<div class="section-title">Crypto (USD)<span>LIVE PRICE + SENTIMENT</span></div><div class="grid crypto" id="crypto"></div>
-<div class="section-title">Indian & Global Indices<span>DATA STATUS</span></div><div class="grid" id="indices"></div>
-<section class="panel"><div class="panelhead"><h3>◉ HISTORICAL PRICE TREND</h3><div><select id="chartSymbol"><option value="XAU/USD">GOLD</option><option value="BTC/USD">BTC</option><option value="ETH/USD">ETH</option><option value="XAG/USD">SILVER</option><option value="WTI">WTI</option></select> <select id="interval"><option value="1day">1 Day</option><option value="1h">1 Hour</option><option value="15min">15 Min</option><option value="5min">5 Min</option></select> <button id="loadChart">LOAD CHART</button></div></div><svg id="priceChart" class="trend" viewBox="0 0 1000 260" preserveAspectRatio="none"><text x="500" y="130" fill="#8798ae" text-anchor="middle">Load historical candles</text></svg><div id="chartInfo" class="meta">Historical availability depends on the provider plan and symbol.</div></section>
-<section class="panel"><div class="panelhead"><h3>◉ SENTIMENT TREND</h3><small>Connected headline scores only</small></div><svg id="sentimentChart" class="trend" viewBox="0 0 1000 260" preserveAspectRatio="none"><text x="500" y="130" fill="#8798ae" text-anchor="middle">Trend appears after sentiment scans</text></svg></section>
-<div class="twocol"><section class="panel"><div class="panelhead"><h3>🔥 CRYPTO BUZZ</h3><small>BTC / ETH headlines</small></div><div id="cryptoNews" class="hint">Waiting for news scan.</div></section><section class="panel"><div class="panelhead"><h3>GLOBAL NEWS FLOW</h3><small id="flowCount">0 HEADLINES</small></div><div id="globalNews" class="hint">Waiting for news scan.</div></section></div>
-<section class="panel"><div class="panelhead"><h3>🇮🇳 NIFTY F&O STOCK NEWS INTELLIGENCE</h3><small>FEED STATUS</small></div><div class="hint">F&O stock headlines, option-chain/OI and PCR will appear only after a verified licensed feed is connected. No fabricated values.</div></section>
-<div class="footer">Market data may be delayed or limited by provider plan. Sentiment is headline analysis, not official positioning or a trade recommendation. Indian index quote and F&O OI/PCR need a verified source. Gold backtesting pip size: 0.01. Automatic trading is disabled; no orders are placed.</div>
+
+  <div class="toolbar">
+    <span>NEWS GATEWAY: <b id="gateway">CHECKING</b></span>
+    <span>LAST SCAN: <b id="lastScan">—</b></span>
+    <button id="scanBtn">↻ SCAN SENTIMENT</button>
+  </div>
+
+  <div class="section">Commodities <span>HEADLINE SENTIMENT</span></div>
+  <div class="cards" id="commodities"></div>
+
+  <div class="section">Crypto <span>HEADLINE SENTIMENT</span></div>
+  <div class="cards crypto" id="crypto"></div>
+
+  <div class="section">Indian & Global Indices <span>HEADLINE SENTIMENT</span></div>
+  <div class="cards" id="indices"></div>
+
+  <section class="panel">
+    <div class="panelhead">
+      <h3>◉ SENTIMENT TREND</h3>
+      <small>Score scale: -10 to +10 · scan history</small>
+    </div>
+    <svg id="trend" class="chart" viewBox="0 0 1000 270" preserveAspectRatio="none">
+      <text x="500" y="135" fill="#8795aa" text-anchor="middle">Trend history will build after repeated scans</text>
+    </svg>
+    <div class="legend" id="legend"></div>
+  </section>
+
+  <div class="newsgrid">
+    <section class="news">
+      <div class="panelhead">
+        <h3>🔥 CRYPTO BUZZ</h3>
+        <small>BTC / ETH</small>
+      </div>
+      <div id="cryptoNews" class="notice">Waiting for news scan.</div>
+    </section>
+
+    <section class="news">
+      <div class="panelhead">
+        <h3>GLOBAL HEADLINE FLOW</h3>
+        <small id="headlineCount">0 HEADLINES</small>
+      </div>
+      <div id="globalNews" class="notice">Waiting for news scan.</div>
+    </section>
+  </div>
+
+  <section class="panel">
+    <div class="panelhead">
+      <h3>INDIAN F&O SENTIMENT WATCH</h3>
+      <small>SOURCE STATUS: NOT VERIFIED</small>
+    </div>
+    <div class="notice">
+      NIFTY / BANKNIFTY / SENSEX sentiment will appear only when
+      the connected news service returns relevant articles.
+      PCR, OI and institutional-flow metrics are not inferred from news.
+    </div>
+  </section>
+
+  <div class="footer">
+    Sentiment scores are based on connected news headlines and the provider's returned analysis.
+    They are not official market positioning or guaranteed signals.
+    Empty or rate-limited sources show INSUFFICIENT DATA.
+    No live prices are displayed. Automatic trading and order placement are disabled.
+  </div>
+
 </main>
+
 <aside class="rail">
-<div class="box"><h4>NODE ACTIVITY</h4><div class="metric" id="nodes">—</div><div class="sub">Live quote feeds responding</div></div>
-<div class="box"><h4>HAVEN VS RISK</h4><div class="metric" id="haven" style="font-size:16px">—</div><div class="sub">Based on available sentiment</div></div>
-<div class="box"><h4>HEADLINE FLOW</h4><div class="metric" id="headlines">—</div><div class="sub">Unique headlines received</div></div>
-<div class="box"><h4>F&O INSTITUTIONAL</h4><div class="metric unavailable" style="font-size:15px">NOT CONNECTED</div><div class="sub">Licensed positioning source required</div></div>
+  <div class="side">
+    <h4>NODE ACTIVITY</h4>
+    <div class="big" id="nodes">—</div>
+    <div class="small">Sentiment endpoints responding</div>
+  </div>
+
+  <div class="side">
+    <h4>HAVEN VS RISK</h4>
+    <div class="big" id="haven" style="font-size:15px">—</div>
+    <div class="small">Gold compared with BTC sentiment</div>
+  </div>
+
+  <div class="side">
+    <h4>HEADLINE FLOW</h4>
+    <div class="big" id="headlineTotal">—</div>
+    <div class="small">Unique returned headlines</div>
+  </div>
+
+  <div class="side">
+    <h4>F&O INSTITUTIONAL</h4>
+    <div class="big" style="font-size:14px;color:var(--amber)">NOT CONNECTED</div>
+    <div class="small">Licensed positioning source required</div>
+  </div>
 </aside>
+
 </div>
+
 <script>
-const API="https://gods-eye-api.hrjaydip.workers.dev";
-const groups={commodities:[["GOLD (XAU/USD)","XAU/USD"],["SILVER (XAG/USD)","XAG/USD"],["WTI CRUDE","WTI"]],crypto:[["BITCOIN (BTC/USD)","BTC/USD"],["ETHEREUM (ETH/USD)","ETH/USD"]],indices:[["NIFTY","NIFTY"],["SENSEX","SENSEX"],["BANKNIFTY","BANKNIFTY"],["NASDAQ (NDX)","NDX"],["S&P 500 (SPX)","SPX"],["DOW JONES","DJI"]]};
-const $=id=>document.getElementById(id),quotes={},sentiments={};
-const fmt=v=>Number(v).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
-function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-async function get(path){const r=await fetch(API+path,{cache:"no-store"});const j=await r.json();if(!r.ok||j.success===false||j.error)throw Error(j.error||("HTTP "+r.status));return j}
-function cid(s){return "c-"+s.replaceAll("/","-")}
-function render(){for(const [g,items] of Object.entries(groups))$(g).innerHTML=items.map(([n,s])=>`<article class="card neutral" id="${cid(s)}"><div class="name">${n}</div><div class="price">—</div><div class="change">Waiting for quote</div><div class="state">LOADING</div><div class="subline">Awaiting provider data</div><span class="badge">DATA PENDING</span></article>`).join("")}
-function unavailable(s,msg){const c=$(cid(s));if(!c)return;c.querySelector(".state").textContent="NOT CONNECTED";c.querySelector(".subline").textContent=msg;c.querySelector(".badge").textContent="NO VERIFIED FEED"}
-async function quote(s){const c=$(cid(s));try{const j=await get("/api/quote?symbol="+encodeURIComponent(s)),d=j.data||{},p=Number(d.close||d.price||d.last);if(!Number.isFinite(p))throw Error("No usable price");const pct=Number(d.percent_change||0),ch=Number(d.change||0);quotes[s]=d;c.className="card "+(pct>0?"bull":pct<0?"bear":"neutral");c.querySelector(".price").textContent=fmt(p);c.querySelector(".change").className="change "+(pct>=0?"positive":"negative");c.querySelector(".change").textContent=(ch>=0?"+":"")+fmt(ch)+" ("+(pct>=0?"+":"")+pct.toFixed(2)+"%)";c.querySelector(".state").textContent="LIVE QUOTE · "+(d.exchange||"PROVIDER");c.querySelector(".subline").textContent="O "+fmt(d.open||0)+" · H "+fmt(d.high||0)+" · L "+fmt(d.low||0);c.querySelector(".badge").textContent="UPDATED "+new Date().toLocaleTimeString();return true}catch(e){unavailable(s,e.message);return false}}
-async function sentiment(s){try{const j=await get("/api/sentiment?symbol="+encodeURIComponent(s));sentiments[s]=j;return j}catch(e){return null}}
-function news(id,arr){if(!arr.length){$(id).textContent="No headlines returned.";return}$(id).className="newslist";$(id).innerHTML=arr.slice(0,12).map(n=>`<div class="newsitem"><a href="${/^https?:\/\//.test(n.url||"")?esc(n.url):"#"}" target="_blank" rel="noopener">${esc(n.title)}</a><div class="meta">${esc(n.source||"News")}</div></div>`).join("")}
-function drawTrend(){const keys=Object.keys(sentiments);if(!keys.length)return;const colors=["#25d7f2","#a78bfa","#35d6a0","#f4b544","#ff6f7d","#60a5fa"];let out='<g stroke="#263449"><path d="M40 25H980M40 130H980M40 235H980"/></g>';keys.forEach((k,i)=>{const v=Number(sentiments[k].score);if(!Number.isFinite(v))return;const x=55+i*900/Math.max(1,keys.length-1),y=130-v*10;out+=`<circle cx="${x}" cy="${y}" r="6" fill="${colors[i%colors.length]}" stroke="#fff"/><text x="${x}" y="253" fill="#8798ae" font-size="11" text-anchor="middle">${esc(k)}</text>`});$("sentimentChart").innerHTML=out+'<text x="8" y="30" fill="#8798ae">+10</text><text x="8" y="135" fill="#8798ae">0</text><text x="8" y="238" fill="#8798ae">-10</text>'}
-async function scanNews(){const syms=["XAU/USD","XAG/USD","WTI","BTC/USD","ETH/USD","NDX","SPX"],all=[];let ok=0;for(const s of syms){const d=await sentiment(s);if(d){ok++;all.push(...(d.news||[]))}}const unique=[...new Map(all.map(n=>[n.title,n])).values()];news("globalNews",unique);news("cryptoNews",["BTC/USD","ETH/USD"].flatMap(s=>sentiments[s]?.news||[]));$("flowCount").textContent=unique.length+" HEADLINES";$("headlines").textContent=unique.length;drawTrend();const g=sentiments["XAU/USD"]?.score,b=sentiments["BTC/USD"]?.score;$("haven").textContent=Number.isFinite(g)&&Number.isFinite(b)?(g>b?"HAVEN LEADS":"RISK ASSETS LEAD"):"INSUFFICIENT";$("risk").textContent=Number.isFinite(b)?(b<=-2?"RISK-OFF":b>=2?"RISK-ON":"MIXED"):"—";return ok}
-async function refresh(){$("refresh").disabled=true;$("apiState").textContent="CHECKING";$("gateway").textContent="CHECKING";try{await get("/api/health");$("apiState").textContent="ONLINE";$("gateway").textContent="ONLINE"}catch(e){$("apiState").textContent="OFFLINE";$("gateway").textContent="OFFLINE";$("refresh").disabled=false;return}
-const all=[...groups.commodities,...groups.crypto,...groups.indices].map(x=>x[1]);const res=await Promise.all(all.map(s=>["NIFTY","SENSEX","BANKNIFTY","DJI"].includes(s)?(unavailable(s,"Verified quote endpoint not connected."),false):quote(s)));const n=res.filter(Boolean).length;$("nodes").textContent=n+"/"+all.length;$("throughput").textContent=Math.round(n/all.length*100)+"%";$("sourceState").textContent=n+" of "+all.length+" quote feeds responding";$("updated").textContent=new Date().toLocaleTimeString();await scanNews();$("refresh").disabled=false}
-async function chart(){const s=$("chartSymbol").value,i=$("interval").value;$("chartInfo").textContent="Loading candles…";try{const j=await get("/api/time_series?symbol="+encodeURIComponent(s)+"&interval="+i),a=j.candles||[];if(!a.length)throw Error("No candles returned");const v=a.map(x=>Number(x.close)),lo=Math.min(...v),hi=Math.max(...v),r=hi-lo||1,pts=v.map((x,k)=>`${40+k*920/Math.max(1,v.length-1)},${230-(x-lo)/r*200}`).join(" ");$("priceChart").innerHTML=`<g stroke="#263449"><path d="M40 25H960M40 125H960M40 230H960"/></g><polyline points="${pts}" fill="none" stroke="#25d7f2" stroke-width="3"/>`;$("chartInfo").textContent=`${s} · ${i} · ${a.length} candles · ${a[0].datetime} to ${a[a.length-1].datetime} · Last ${fmt(v[v.length-1])}`}catch(e){$("chartInfo").textContent="Historical data unavailable: "+e.message;$("priceChart").innerHTML='<text x="500" y="130" fill="#f4b544" text-anchor="middle">Historical data unavailable</text>'}}
-render();$("refresh").addEventListener("click",refresh);$("loadChart").addEventListener("click",chart);refresh();
+const API = "https://gods-eye-api.hrjaydip.workers.dev";
+
+const groups = {
+  commodities: [
+    ["GOLD","XAU/USD"],
+    ["SILVER","XAG/USD"],
+    ["CRUDE OIL (WTI)","WTI"]
+  ],
+  crypto: [
+    ["BITCOIN","BTC/USD"],
+    ["ETHEREUM","ETH/USD"]
+  ],
+  indices: [
+    ["NIFTY","NIFTY"],
+    ["SENSEX","SENSEX"],
+    ["BANKNIFTY","BANKNIFTY"],
+    ["NASDAQ","NDX"],
+    ["DOW JONES","DJI"],
+    ["GLOBAL RISK","GLOBALRISK"]
+  ]
+};
+
+const $ = id => document.getElementById(id);
+const results = {};
+const history = [];
+
+const colors = [
+  "#2878ff","#26c6e6","#a34cf5","#ffc21c",
+  "#d6dce5","#ff7b22","#ff315d","#20c66a",
+  "#ed3b9a","#e6e84b","#a0a8b5"
+];
+
+const allSymbols = Object.values(groups).flat();
+
+function esc(s) {
+  return String(s ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",
+    '"':"&quot;","'":"&#39;"
+  }[c]));
+}
+
+async function api(path) {
+  const response = await fetch(API + path, {cache:"no-store"});
+  const data = await response.json();
+
+  if (!response.ok || data.success === false || data.error) {
+    throw new Error(data.error || ("HTTP " + response.status));
+  }
+
+  return data;
+}
+
+function cardId(symbol) {
+  return "s-" + symbol.replace(/[^a-z0-9]/gi,"-");
+}
+
+function buildCards() {
+  for (const group of Object.keys(groups)) {
+    $(group).innerHTML = groups[group].map(([name,symbol]) => `
+      <article class="signal neutral" id="${cardId(symbol)}">
+        <div class="symbol">${name}</div>
+        <div class="score">—</div>
+        <div class="bias">CHECKING</div>
+        <svg class="spark" viewBox="0 0 180 32" preserveAspectRatio="none">
+          <polyline points="0,16 30,16 60,16 90,16 120,16 150,16 180,16"/>
+        </svg>
+        <div class="details">Waiting for source</div>
+        <span class="confidence">INSUFFICIENT DATA</span>
+      </article>
+    `).join("");
+  }
+
+  $("legend").innerHTML = allSymbols.map(([name,symbol],i) =>
+    `<span style="--dot:${colors[i]}">${name}</span>`
+  ).join("");
+}
+
+function normalScore(value) {
+  const n = Number(value);
+  return Number.isFinite(n) ? Math.max(-10,Math.min(10,n)) : null;
+}
+
+function bias(score) {
+  if (score === null) return "INSUFFICIENT DATA";
+  if (score >= 5) return "EXTREMELY BULLISH";
+  if (score >= 2) return "BULLISH";
+  if (score <= -5) return "EXTREMELY BEARISH";
+  if (score <= -2) return "BEARISH";
+  return "NEUTRAL";
+}
+
+function sparkPoints(values) {
+  if (values.length < 2) {
+    return "0,16 30,16 60,16 90,16 120,16 150,16 180,16";
+  }
+
+  const vals = values.slice(-8);
+  const min = Math.min(...vals);
+  const max = Math.max(...vals);
+  const range = max - min || 1;
+
+  return vals.map((v,i) =>
+    `${i*180/Math.max(1,vals.length-1)},${29-(v-min)/range*24}`
+  ).join(" ");
+}
+
+function renderCard(symbol) {
+  const item = results[symbol];
+  const el = $(cardId(symbol));
+  if (!el) return;
+
+  const score = normalScore(item?.score);
+  const headlines = item?.news || [];
+  const confidence = String(item?.confidence || "").toUpperCase();
+
+  el.className = "signal " +
+    (score === null ? "neutral" :
+    score > 0.7 ? "bull" :
+    score < -0.7 ? "bear" : "neutral");
+
+  el.querySelector(".score").textContent =
+    score === null ? "—" : (score > 0 ? "+" : "") + score.toFixed(1);
+
+  el.querySelector(".bias").textContent = bias(score);
+
+  el.querySelector(".details").textContent =
+    score === null
+      ? `${headlines.length} headlines · no reliable score returned`
+      : `${headlines.length} headlines · ${item?.source || "Connected news sources"}`;
+
+  el.querySelector(".confidence").textContent =
+    score === null ? "INSUFFICIENT DATA" :
+    confidence || "CONFIDENCE NOT PROVIDED";
+
+  if (score !== null) {
+    const oldValues = history.map(h => h[symbol]).filter(Number.isFinite);
+    oldValues.push(score);
+    el.querySelector("polyline").setAttribute("points",sparkPoints(oldValues));
+  }
+}
+
+function renderTrend() {
+  const valid = allSymbols.filter(([name,symbol]) =>
+    history.some(h => Number.isFinite(h[symbol]))
+  );
+
+  if (!valid.length) return;
+
+  let output = "";
+
+  valid.forEach(([name,symbol],i) => {
+    const values = history
+      .map((h,k) => ({k,v:h[symbol]}))
+      .filter(x => Number.isFinite(x.v));
+
+    if (!values.length) return;
+
+    const points = values.map(x =>
+      `${45+x.k*910/Math.max(1,history.length-1)},${135-x.v*11}`
+    ).join(" ");
+
+    const last = values[values.length-1];
+
+    output += `
+      <polyline points="${points}" fill="none"
+        stroke="${colors[i%colors.length]}" stroke-width="2.5"/>
+      <circle
+        cx="${45+last.k*910/Math.max(1,history.length-1)}"
+        cy="${135-last.v*11}" r="4"
+        fill="${colors[i%colors.length]}"/>
+    `;
+  });
+
+  output += `
+    <g stroke="#304057" stroke-dasharray="4 5">
+      <path d="M40 25H970M40 135H970M40 245H970"/>
+    </g>
+    <g fill="#8795aa" font-size="11">
+      <text x="5" y="29">+10</text>
+      <text x="15" y="139">0</text>
+      <text x="5" y="249">-10</text>
+    </g>
+  `;
+
+  $("trend").innerHTML = output;
+}
+
+function renderNews(target,items) {
+  const el = $(target);
+
+  if (!items.length) {
+    el.className = "notice";
+    el.textContent = "No headlines returned by connected sources.";
+    return;
+  }
+
+  el.className = "items";
+
+  el.innerHTML = items.slice(0,12).map(n => `
+    <div class="item">
+      <a href="${/^https?:\/\//.test(n.url || "") ? esc(n.url) : "#"}"
+         target="_blank" rel="noopener">
+        ${esc(n.title || "Untitled headline")}
+      </a>
+      <small>${esc(n.source || "News source")}</small>
+    </div>
+  `).join("");
+}
+
+async function scan() {
+  const button = $("scanBtn");
+
+  button.disabled = true;
+  $("gateway").textContent = "SCANNING";
+  $("online").textContent = "SCANNING";
+
+  let connected = 0;
+  const snapshot = {};
+  const allNews = [];
+
+  for (const [name,symbol] of allSymbols) {
+    try {
+      const data = await api(
+        "/api/sentiment?symbol=" + encodeURIComponent(symbol)
+      );
+
+      results[symbol] = data;
+      connected++;
+
+      const score = normalScore(data.score);
+      if (score !== null) snapshot[symbol] = score;
+
+      (data.news || []).forEach(n =>
+        allNews.push({...n,_symbol:symbol})
+      );
+
+    } catch(error) {
+      results[symbol] = {
+        score:null,
+        confidence:"insufficient",
+        news:[],
+        error:error.message
+      };
+    }
+
+    renderCard(symbol);
+  }
+
+  history.push(snapshot);
+  if (history.length > 35) history.shift();
+
+  renderTrend();
+
+  const unique = [
+    ...new Map(allNews.map(n => [n.title || JSON.stringify(n),n])).values()
+  ];
+
+  renderNews("globalNews",unique);
+
+  renderNews(
+    "cryptoNews",
+    allNews.filter(n =>
+      ["BTC/USD","ETH/USD"].includes(n._symbol)
+    )
+  );
+
+  $("headlineCount").textContent = unique.length + " HEADLINES";
+  $("headlineTotal").textContent = unique.length;
+  $("nodes").textContent = connected + "/" + allSymbols.length;
+
+  $("throughput").textContent =
+    Math.round(connected/allSymbols.length*100) + "%";
+
+  $("feedCount").textContent =
+    connected + " of " + allSymbols.length + " sentiment feeds responded";
+
+  $("gateway").textContent =
+    connected ? "ONLINE · PARTIAL" : "NO DATA";
+
+  $("online").textContent =
+    connected ? "ONLINE" : "CHECK SOURCES";
+
+  $("lastScan").textContent = new Date().toLocaleTimeString();
+
+  const gold = normalScore(results["XAU/USD"]?.score);
+  const btc = normalScore(results["BTC/USD"]?.score);
+
+  $("haven").textContent =
+    gold === null || btc === null
+      ? "INSUFFICIENT"
+      : gold > btc ? "GOLD LEADS" : "BTC LEADS";
+
+  $("risk").textContent =
+    btc === null ? "—" :
+    btc <= -2 ? "RISK-OFF" :
+    btc >= 2 ? "RISK-ON" : "MIXED";
+
+  button.disabled = false;
+}
+
+buildCards();
+$("scanBtn").addEventListener("click",scan);
+scan();
 </script>
+
 </body>
 </html>
