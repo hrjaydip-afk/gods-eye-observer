@@ -756,6 +756,133 @@ async function scan() {
 buildCards();
 $("scanBtn").addEventListener("click",scan);
 scan();
+  
+// ===== GOD'S EYE: CLICK CARD TO OPEN RELATED NEWS =====
+
+document.addEventListener("click", function(event) {
+  const card = event.target.closest(".signal");
+  if (!card) return;
+
+  const pair = allSymbols.find(function(item) {
+    return card.id === cardId(item[1]);
+  });
+
+  if (!pair) return;
+
+  const name = pair[0];
+  const symbol = pair[1];
+  const item = results[symbol];
+  const headlines = item?.news || [];
+
+  let modal = document.getElementById("instrumentNewsModal");
+
+  if (!modal) {
+    modal = document.createElement("div");
+    modal.id = "instrumentNewsModal";
+
+    modal.style.cssText = `
+      position:fixed;
+      inset:0;
+      z-index:99999;
+      background:rgba(0,0,0,.88);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:15px;
+    `;
+
+    document.body.appendChild(modal);
+  }
+
+  const newsHTML = headlines.length
+    ? headlines.map(function(n) {
+        const validURL = /^https?:\/\//i.test(n.url || "");
+        return `
+          <div style="
+            padding:13px 5px;
+            border-bottom:1px solid #26364c;
+            line-height:1.6;
+          ">
+            ${
+              validURL
+                ? `<a href="${esc(n.url)}"
+                     target="_blank"
+                     rel="noopener noreferrer"
+                     style="color:#35d9f2;text-decoration:none;font-weight:bold">
+                     ${esc(n.title || "News headline")}
+                   </a>`
+                : `<span style="color:#35d9f2;font-weight:bold">
+                     ${esc(n.title || "News headline")}
+                   </span>`
+            }
+            <div style="color:#8795aa;font-size:11px;margin-top:5px">
+              ${esc(n.source || "News source")}
+            </div>
+          </div>
+        `;
+      }).join("")
+    : `<div style="padding:20px;color:#f3b64d">
+         No related headlines available yet.
+         Please run SCAN SENTIMENT again.
+       </div>`;
+
+  modal.innerHTML = `
+    <div style="
+      width:100%;
+      max-width:650px;
+      max-height:85vh;
+      overflow:auto;
+      background:#0d1524;
+      border:1px solid #35d9f2;
+      border-radius:14px;
+      padding:18px;
+      color:#e8f0fc;
+    ">
+      <div style="
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        gap:10px;
+        border-bottom:1px solid #26364c;
+        padding-bottom:13px;
+      ">
+        <div>
+          <h2 style="color:#35d9f2;margin:0">
+            ${esc(name)}
+          </h2>
+          <small style="color:#8795aa">
+            ${esc(symbol)} · RELATED NEWS
+          </small>
+        </div>
+
+        <button id="closeInstrumentNews"
+          style="font-size:18px">✕</button>
+      </div>
+
+      <div style="margin-top:12px">
+        ${newsHTML}
+      </div>
+    </div>
+  `;
+
+  document.getElementById("closeInstrumentNews")
+    .addEventListener("click", function() {
+      modal.remove();
+    });
+
+  modal.addEventListener("click", function(e) {
+    if (e.target === modal) modal.remove();
+  });
+});
+
+document.addEventListener("keydown", function(e) {
+  if (e.key === "Escape") {
+    document.getElementById("instrumentNewsModal")?.remove();
+  }
+});
+
+// ===== END CARD NEWS FEATURE =====
+
 </script>
 
 </body>
